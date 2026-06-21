@@ -54,6 +54,8 @@ Tasks you repeat, and the standards you want applied every time, are worth writi
 
 These are illustrative, not mandatory. The principle is to standardize the *artifacts and the process* — the documents, skills, and review steps; rather than the tool or model that runs them.
 
+A skill's *content* is model-independent: it is plain instruction that any capable assistant can follow, which is what makes it portable and worth sharing. Two caveats follow from that. First, *how* a skill is discovered and loaded; a folder convention, a slash command, a system prompt, is a feature of the harness you run, not of the skill itself; the same instructions can be carried into a different tool by whatever mechanism that tool provides. Second, *how well* a skill executes depends on the model's capability: a weaker model may follow a long, multi-step skill less faithfully or lack the tool use it assumes. So write skills as portable, model-agnostic procedures, but validate each one against the model and harness the team actually uses.
+
 ### Match conventions and disclose AI use
 
 Align AI-assisted contributions with the conventions already in use like code style, commit and PR titles, and description format. Be transparent about which portions were AI-generated and summarize them for reviewers, and add comments explaining the verification steps you took for any part you are less certain about. Watch for the common failure modes of generated PRs: overly verbose comments, unnecessary or redundant tests, and fixes that address symptoms rather than root causes.
@@ -70,4 +72,29 @@ This document was inspired by the following resources:
 - ["Ten simple rules for using large language models in science, responsibly"](https://pmc.ncbi.nlm.nih.gov/articles/PMC10829980/): safeguards and productive applications, including verification of claims, confidentiality, and the "halo effect" of fluent output.
 - [Best practices for working with an AI coding agent](https://code.claude.com/docs/en/best-practices): explore-then-plan-then-code, specific prompting, giving the model a way to verify its work, managing context, reusable skills, and adversarial review.
 - [Open Source AI Contribution Policies (melissawm)](https://github.com/melissawm/open-source-ai-contribution-policies): a collection of how open-source projects approach AI-generated contributions.
+
+## Appendix: Example setup (Claude Code)
+
+This appendix is **one concrete illustration**, not a requirement. It maps the model-agnostic practices above onto the skills and harnesses one developer happens to use with a particular tool (Claude Code). Another tool or model would implement the same ideas through its own mechanisms. The practices are what matter, not the names below.
+
+### Skills (named procedures the assistant loads on demand)
+
+| Practice in this document | Skill used | What it does |
+| --- | --- | --- |
+| Capture repeatable work — code-review harness | `code-review` / `requesting-code-review` | Reviews the diff for bugs, security, and quality in a fresh context and returns specific, line-referenced findings. |
+| Capture repeatable work — security review | `security-review` | A dedicated pass for injection, authentication/authorization flaws, secret handling, and unsafe data flows before merging sensitive changes. |
+| Explore and plan before generating code | `brainstorming` + `writing-plans` | Explores intent and requirements before any code is written, then produces a written plan or spec to execute against. |
+| Always verify; never assume it works | `verify` | Runs the app or feature and observes actual behavior rather than asserting success. |
+| (Quality cleanup) | `simplify` | Reviews changed code for reuse and simplification — quality only, not bug-hunting. |
+| Understand and own every change | `init` | Generates an overview/instructions file describing the codebase's architecture and conventions. |
+
+### Harnesses (runtime mechanisms — tool-specific)
+
+- **A shared instructions file** (e.g. `CLAUDE.md`): persistent project context: build commands, code style, conventions loaded automatically each session.
+- **Plan mode**: separates exploration and planning from implementation.
+- **Subagents**: run research or review in a fresh, isolated context so it does not pollute the main session and the reviewer is not biased toward code it just wrote.
+- **Hooks**: deterministic checks that run every time (for example, linting after each edit).
+- **Workflows**: multi-step orchestration of several agents for fan-out-and-verify patterns.
+
+Remember the distinction from the skills section: the *content* of these skills is portable across tools and models, but the *loading mechanisms* listed under harnesses are specific to this tool, and *execution quality* depends on the model running them.
 
