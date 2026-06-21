@@ -61,3 +61,13 @@ Align AI-assisted contributions with the conventions already in use like code st
 ### Keep changes reviewable and respect maintainers
 
 Break large contributions into smaller, focused PRs that a reviewer can actually reason about. Never use AI agents to automatically tag, ping, or otherwise pressure maintainers. Remember that the goal of review is a collaborative learning exchange — keep your own engagement high enough that both you and the reviewer benefit from it.
+
+## References
+
+This document was inspired by the following resources:
+
+- [Apache Arrow — AI-generated code policy](https://arrow.apache.org/docs/dev/developers/overview.html#ai-generated-code): project guidance on owning, disclosing, and scoping AI-assisted contributions.
+- ["Ten simple rules for using large language models in science, responsibly"](https://pmc.ncbi.nlm.nih.gov/articles/PMC10829980/): safeguards and productive applications, including verification of claims, confidentiality, and the "halo effect" of fluent output.
+- [Best practices for working with an AI coding agent](https://code.claude.com/docs/en/best-practices): explore-then-plan-then-code, specific prompting, giving the model a way to verify its work, managing context, reusable skills, and adversarial review.
+- [Open Source AI Contribution Policies (melissawm)](https://github.com/melissawm/open-source-ai-contribution-policies): a collection of how open-source projects approach AI-generated contributions.
+
