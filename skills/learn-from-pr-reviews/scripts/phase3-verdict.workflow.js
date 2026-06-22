@@ -37,6 +37,7 @@ The record contains:
 - resolved / outdated (inline only): thread resolution + whether the code under it changed
 - code_window or diff_hunk: the code the reviewer was looking at
 - post_comment_delta: the git diff of that file AFTER the comment (empty = file unchanged afterward)
+- delta_truncated: true if post_comment_delta was cut off at a line cap (the diff is INCOMPLETE)
 - pr_commits_after: commit summaries landed after the comment
 - code_context: "full" | "partial" | "none"
 
@@ -60,7 +61,7 @@ YOUR JUDGEMENT (output via the StructuredOutput tool, matching the schema exactl
    - unclear: evidence insufficient.
    Use post_comment_delta as the primary signal: a delta that touches the discussed code = likely addressed; an EMPTY delta + unresolved = likely ignored.
 
-4. confidence: high/med/low. Use low when code_context is partial or none.
+4. confidence: high/med/low. Use low when code_context is partial or none, OR when delta_truncated is true (you cannot see the whole change, so an "addressed/ignored" call is uncertain).
 
 5. lesson: ONE generalizable reviewer rule, phrased to fit a review checklist for ANY future PR (not specific to this file). Empty string "" if substantive is false.
 

@@ -117,7 +117,9 @@ confirm nits were correctly excluded. Report what you checked.
 ## v1 limitations
 
 - Fixed ±50-line code window (no language-aware function extraction).
-- GraphQL `reviewThreads` capped at first 100 threads / 50 comments per PR.
+- Per-file post-comment deltas are capped (`MAX_DELTA_LINES`); when a diff is
+  longer it's truncated and the record is flagged `delta_truncated: true` so the
+  phase-3 agent lowers its confidence (never a silent cut-off).
 - Outdated comments whose file was renamed degrade to `code_context: partial`
   (judged on comment + diff_hunk + subsequent commits).
 - One repo per run.

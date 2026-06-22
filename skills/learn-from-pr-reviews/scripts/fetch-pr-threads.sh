@@ -180,18 +180,24 @@ enrich_one() {
   local window
   window="$(awk -v L="$line" -v N="$WINDOW" 'NR>=L-N && NR<=L+N {printf "%6d  %s\n", NR, $0}' "$TMP/blob")"
 
-  # post-comment delta for this file (capped). The trailing `|| true` is REQUIRED:
-  # when the diff exceeds MAX_DELTA_LINES, `head` closes the pipe early and git
-  # diff gets SIGPIPE (exit 141); under `set -e -o pipefail` that would otherwise
-  # abort the whole run. The cap is intentional, so swallow the truncation signal.
-  local delta=""
+  # post-comment delta for this file. Written to a temp file (no pipe -> no
+  # SIGPIPE) so we can measure the FULL length before capping at MAX_DELTA_LINES.
+  # The cap is intentional, but a silently-truncated delta would let a phase-3
+  # agent judge "addressed vs ignored" on incomplete evidence, so when we truncate
+  # we set delta_truncated:true and the agent downgrades its confidence.
+  : > "$TMP/delta_full"
   if [[ -n "$PR_HEAD" ]] && git -C "$LOCAL" cat-file -e "${PR_HEAD}^{commit}" 2>/dev/null; then
-    delta="$(git -C "$LOCAL" diff --find-renames "$commit" "$PR_HEAD" -- "$path" 2>/dev/null \
-      | head -n "$MAX_DELTA_LINES" || true)"
+    git -C "$LOCAL" diff --find-renames "$commit" "$PR_HEAD" -- "$path" \
+      > "$TMP/delta_full" 2>/dev/null || : > "$TMP/delta_full"
   fi
+  local full_lines delta delta_trunc
+  full_lines="$(wc -l < "$TMP/delta_full" | tr -d ' ')"
+  delta="$(head -n "$MAX_DELTA_LINES" "$TMP/delta_full")"
+  if (( full_lines > MAX_DELTA_LINES )); then delta_trunc=true; else delta_trunc=false; fi
 
-  jq -c --arg w "$window" --arg d "$delta" --argjson ca "$commits_after" \
-    '. + {code_context:"full", code_window:$w, post_comment_delta:$d, pr_commits_after:$ca}' <<<"$rec"
+  jq -c --arg w "$window" --arg d "$delta" --argjson dt "$delta_trunc" --argjson ca "$commits_after" \
+    '. + {code_context:"full", code_window:$w, post_comment_delta:$d,
+          delta_truncated:$dt, pr_commits_after:$ca}' <<<"$rec"
 }
 
 : > "$TMP/enriched.jsonl"
