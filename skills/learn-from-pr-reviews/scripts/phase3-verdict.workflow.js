@@ -89,4 +89,17 @@ const verdicts = await parallel(
 
 const ok = verdicts.filter(Boolean)
 log(`Batch [${start}, ${start + count}): ${ok.length}/${count} verdicts (${ok.filter(v => v.substantive).length} substantive)`)
+
+// Fail loud rather than return a short batch: a dropped record must never pass
+// silently just because the orchestrator forgot to diff counts. Workflow resume
+// reuses the cached successes, so re-running only re-does the failed agents.
+const failed = paths.filter((_, i) => !verdicts[i])
+if (failed.length) {
+  throw new Error(
+    `Batch [${start}, ${start + count}): ${failed.length}/${count} agents returned no verdict. ` +
+    `Refusing to return a short batch so records can't be silently lost. ` +
+    `Failed: ${failed.map(p => p.split('/').pop()).join(', ')}. ` +
+    `Re-run this batch (resume reuses cached successes).`
+  )
+}
 return ok
