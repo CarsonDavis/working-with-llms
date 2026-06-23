@@ -162,17 +162,43 @@ enrich_one() {
   commits_after="$(jq -c --arg d "$first_date" \
     '[.[] | select(.date > $d) | (.sha[0:8] + "  " + .msg)]' "$TMP/commit_list.json")"
 
+  # Rename map for commit..PR_HEAD (whole-tree, --find-renames, cached per commit
+  # since PR_HEAD is fixed for the run). Used twice below: to resolve the path as
+  # it existed at the comment commit, and to find where that file ended up after.
+  local ns_cache=""
+  if [[ -n "$commit" && -n "$PR_HEAD" ]] && git -C "$LOCAL" cat-file -e "${PR_HEAD}^{commit}" 2>/dev/null; then
+    ns_cache="$TMP/ns-${commit}"
+    if [[ ! -f "$ns_cache" ]]; then
+      git -C "$LOCAL" diff --find-renames --name-status "$commit" "$PR_HEAD" \
+        > "$ns_cache" 2>/dev/null || : > "$ns_cache"
+    fi
+  fi
+
+  # GitHub reports a comment's CURRENT path but we anchor on its ORIGINAL commit
+  # (original_commit_id). If the file was renamed between the two, the current path
+  # does not exist at the comment commit, so resolve the path AS IT WAS there: the
+  # OLD side of the rename whose NEW side is the API path. (No rename, or a comment
+  # made on the final path -> path_at_commit stays == path.)
+  local path_at_commit="$path"
+  if [[ -n "$commit" && -n "$path" ]] && ! git -C "$LOCAL" cat-file -e "${commit}:${path}" 2>/dev/null; then
+    if [[ -n "$ns_cache" && -f "$ns_cache" ]]; then
+      local old_path
+      old_path="$(awk -F'\t' -v p="$path" '$1 ~ /^R/ && $3 == p {print $2; exit}' "$ns_cache")"
+      if [[ -n "$old_path" ]]; then path_at_commit="$old_path"; fi
+    fi
+  fi
+
   # Resolve the blob the reviewer saw -> temp file (avoids any pipe/SIGPIPE).
   : > "$TMP/blob"
-  if [[ -n "$commit" && -n "$path" ]]; then
-    git -C "$LOCAL" show "${commit}:${path}" > "$TMP/blob" 2>/dev/null || : > "$TMP/blob"
+  if [[ -n "$commit" && -n "$path_at_commit" ]]; then
+    git -C "$LOCAL" show "${commit}:${path_at_commit}" > "$TMP/blob" 2>/dev/null || : > "$TMP/blob"
   fi
 
   # Missing / empty / binary blob -> partial (keep the stored diff_hunk for context).
   if [[ ! -s "$TMP/blob" ]] || ! grep -Iq . "$TMP/blob" 2>/dev/null; then
     jq -c --argjson ca "$commits_after" \
       '. + {code_context:"partial", code_window:null, post_comment_delta:null,
-            pr_commits_after:$ca}' <<<"$rec"
+            renamed_to:null, delta_truncated:null, pr_commits_after:$ca}' <<<"$rec"
     return
   fi
 
@@ -180,23 +206,41 @@ enrich_one() {
   local window
   window="$(awk -v L="$line" -v N="$WINDOW" 'NR>=L-N && NR<=L+N {printf "%6d  %s\n", NR, $0}' "$TMP/blob")"
 
-  # post-comment delta for this file. Written to a temp file (no pipe -> no
-  # SIGPIPE) so we can measure the FULL length before capping at MAX_DELTA_LINES.
-  # The cap is intentional, but a silently-truncated delta would let a phase-3
-  # agent judge "addressed vs ignored" on incomplete evidence, so when we truncate
-  # we set delta_truncated:true and the agent downgrades its confidence.
+  # post-comment delta. Rename-aware: a delta scoped to the old path alone makes
+  # git report a *move* as a plain deletion (--find-renames can't pair a rename
+  # when the new side is filtered out by the pathspec), and a large class of review
+  # comments asks precisely for a file to be MOVED. So find where path_at_commit
+  # went (the NEW side of its rename, if any), record renamed_to, and include both
+  # paths in the pathspec so the agent sees the rename + destination. Written to a
+  # temp file (no pipe -> no SIGPIPE) so we measure the full length before capping
+  # at MAX_DELTA_LINES; a silent truncation would let a phase-3 agent judge
+  # "addressed vs ignored" on incomplete evidence, so we flag delta_truncated.
+  local renamed_to=""
+  if [[ -n "$ns_cache" && -f "$ns_cache" ]]; then
+    renamed_to="$(awk -F'\t' -v p="$path_at_commit" '$1 ~ /^R/ && $2 == p {print $3; exit}' "$ns_cache")"
+  fi
+
   : > "$TMP/delta_full"
   if [[ -n "$PR_HEAD" ]] && git -C "$LOCAL" cat-file -e "${PR_HEAD}^{commit}" 2>/dev/null; then
-    git -C "$LOCAL" diff --find-renames "$commit" "$PR_HEAD" -- "$path" \
-      > "$TMP/delta_full" 2>/dev/null || : > "$TMP/delta_full"
+    if [[ -n "$renamed_to" ]]; then
+      git -C "$LOCAL" diff --find-renames "$commit" "$PR_HEAD" -- "$path_at_commit" "$renamed_to" \
+        > "$TMP/delta_full" 2>/dev/null || : > "$TMP/delta_full"
+    else
+      git -C "$LOCAL" diff --find-renames "$commit" "$PR_HEAD" -- "$path_at_commit" \
+        > "$TMP/delta_full" 2>/dev/null || : > "$TMP/delta_full"
+    fi
   fi
   local full_lines delta delta_trunc
   full_lines="$(wc -l < "$TMP/delta_full" | tr -d ' ')"
   delta="$(head -n "$MAX_DELTA_LINES" "$TMP/delta_full")"
   if (( full_lines > MAX_DELTA_LINES )); then delta_trunc=true; else delta_trunc=false; fi
 
-  jq -c --arg w "$window" --arg d "$delta" --argjson dt "$delta_trunc" --argjson ca "$commits_after" \
-    '. + {code_context:"full", code_window:$w, post_comment_delta:$d,
+  # Record the reviewer's path (path_at_commit) as `path`; renamed_to carries the
+  # post-comment destination when the file moved.
+  jq -c --arg w "$window" --arg d "$delta" --arg rt "$renamed_to" --arg pac "$path_at_commit" \
+        --argjson dt "$delta_trunc" --argjson ca "$commits_after" \
+    '. + {path:$pac, code_context:"full", code_window:$w, post_comment_delta:$d,
+          renamed_to:(if $rt == "" then null else $rt end),
           delta_truncated:$dt, pr_commits_after:$ca}' <<<"$rec"
 }
 

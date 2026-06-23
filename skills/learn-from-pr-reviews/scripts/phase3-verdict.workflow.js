@@ -38,6 +38,7 @@ The record contains:
 - code_window or diff_hunk: the code the reviewer was looking at
 - post_comment_delta: the git diff of that file AFTER the comment (empty = file unchanged afterward)
 - delta_truncated: true if post_comment_delta was cut off at a line cap (the diff is INCOMPLETE)
+- renamed_to: if non-null, the commented file was MOVED to this path after the comment (strong evidence a "move/relocate/reorganize this file" request was acted on)
 - pr_commits_after: commit summaries landed after the comment
 - code_context: "full" | "partial" | "none"
 
@@ -59,7 +60,7 @@ YOUR JUDGEMENT (output via the StructuredOutput tool, matching the schema exactl
    - ignored: no reply, thread unresolved, and no relevant change in the delta.
    - acknowledged-no-change: discussed/agreed but code intentionally left as-is.
    - unclear: evidence insufficient.
-   Use post_comment_delta as the primary signal: a delta that touches the discussed code = likely addressed; an EMPTY delta + unresolved = likely ignored.
+   Use post_comment_delta as the primary signal: a delta that touches the discussed code = likely addressed; an EMPTY delta + unresolved = likely ignored. If renamed_to is non-null the file was relocated after the comment — when the comment asked to move/reorganize the file and the new path satisfies that request, that is "addressed" (do NOT read the rename's whole-file deletion as the file being removed).
 
 4. confidence: high/med/low. Use low when code_context is partial or none, OR when delta_truncated is true (you cannot see the whole change, so an "addressed/ignored" call is uncertain).
 
