@@ -6,7 +6,7 @@
 //                      start: 0, count: 900,
 //                      schema: <parsed contents of references/verdict-schema.json> } })
 //
-// Runs one Haiku subagent per thread record in the slice [start, start+count).
+// Runs one subagent (Sonnet by default) per thread record in the slice [start, start+count).
 // Each agent reads its own rec-NNNNN.json, judges it, and returns a
 // schema-validated verdict. The workflow returns the array of verdicts; the
 // caller appends it to 03-verdicts.jsonl.
@@ -22,8 +22,8 @@
 
 export const meta = {
   name: 'learn-from-pr-reviews-phase3',
-  description: 'Judge each PR review comment thread (substantive? acted-on? lesson?) with a Haiku subagent',
-  phases: [{ title: 'Verdict', detail: 'one Haiku agent per comment thread', model: 'haiku' }],
+  description: 'Judge each PR review comment thread (substantive? acted-on? lesson?) with a Sonnet subagent',
+  phases: [{ title: 'Verdict', detail: 'one Sonnet agent per comment thread', model: 'sonnet' }],
 }
 
 const PROMPT = (path) => `You are mining ONE code-review comment thread from a real pull request to extract reusable reviewer wisdom.
@@ -61,6 +61,9 @@ YOUR JUDGEMENT (output via the StructuredOutput tool, matching the schema exactl
    - acknowledged-no-change: discussed/agreed but code intentionally left as-is.
    - unclear: evidence insufficient.
    Use post_comment_delta as the primary signal: a delta that touches the discussed code = likely addressed; an EMPTY delta + unresolved = likely ignored. If renamed_to is non-null the file was relocated after the comment — when the comment asked to move/reorganize the file and the new path satisfies that request, that is "addressed" (do NOT read the rename's whole-file deletion as the file being removed).
+   HARD RULES — the record's structured fields OVERRIDE your impression of the prose:
+   - If resolved is true, the thread was RESOLVED on GitHub: NEVER output "ignored". Pick "addressed" if the delta shows the change, otherwise "acknowledged-no-change" or "unclear".
+   - Output "ignored" ONLY when resolved is false AND post_comment_delta is empty (or clearly unrelated to the comment). If the delta is non-empty but you cannot tell whether it addresses THIS specific comment, output "unclear" — never "ignored".
 
 4. confidence: high/med/low. Use low when code_context is partial or none, OR when delta_truncated is true (you cannot see the whole change, so an "addressed/ignored" call is uncertain).
 
@@ -79,12 +82,13 @@ if (!cfg.schema) throw new Error('args.schema is required (pass the parsed verdi
 
 const start = Number(cfg.start || 0)
 const count = Number(cfg.count)
+const model = cfg.model || 'sonnet'  // Sonnet is better-calibrated on ambiguous "acted-on?" cases; pass args.model to override (e.g. 'haiku' to cut cost)
 const pad = (i) => String(i).padStart(5, '0')
 const paths = Array.from({ length: count }, (_, k) => `${cfg.dir}/rec-${pad(start + k)}.json`)
 
 const verdicts = await parallel(
   paths.map((p, k) => () =>
-    agent(PROMPT(p), { label: `verdict:rec-${pad(start + k)}`, schema: cfg.schema, model: 'haiku' })
+    agent(PROMPT(p), { label: `verdict:rec-${pad(start + k)}`, schema: cfg.schema, model })
   )
 )
 

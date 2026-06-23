@@ -58,7 +58,7 @@ afterward). All sources are fetched with `--paginate`, so there are no comment
 caps. The first invocation auto-detects which local remote points at the repo and
 fetches PR refs into the clone once, so even closed-PR commits resolve.
 
-### Phase 3 — Per-thread verdict (Workflow fan-out, Haiku)
+### Phase 3 — Per-thread verdict (Workflow fan-out, Sonnet)
 
 First, split the threads into one file per record (handles thousands; prints the
 total COUNT):
@@ -66,13 +66,17 @@ total COUNT):
 COUNT=$(skills/learn-from-pr-reviews/scripts/split-threads.sh <owner/repo>)
 ```
 Then invoke the **Workflow tool** (this skill's instruction is the opt-in) to run
-one **Haiku** subagent per record, using the template
+one **Sonnet** subagent per record (the default; pass `args.model: "haiku"` to
+trade accuracy for cost), using the template
 `skills/learn-from-pr-reviews/scripts/phase3-verdict.workflow.js`. Each agent
 reads its `03-input/rec-NNNNN.json`, decides `substantive`, `category`, and the
-evidence-based `verdict` (using `post_comment_delta` as the primary "acted on?"
-signal), and distills ONE generalizable `lesson`. The verdict contract lives in
-`references/verdict-schema.json` (the single source of truth) — read it and pass
-it as `args.schema`; the dimensions are defined in `references/categories.md`.
+evidence-based `verdict` (using `post_comment_delta`, `renamed_to`, and the
+`resolved` flag as the "acted on?" signals), and distills ONE generalizable
+`lesson`. The verdict contract lives in `references/verdict-schema.json` (the
+single source of truth) — read it and pass it as `args.schema`; the dimensions
+are defined in `references/categories.md`. Sonnet is the default because it is
+materially better calibrated than Haiku on ambiguous "addressed vs. ignored"
+cases (it reaches for `unclear` instead of a confident wrong verdict).
 
 **Batch the invocation.** A single workflow can spawn at most ~1000 agents over
 its lifetime, so process the records in batches of ≤900: for `start` =
