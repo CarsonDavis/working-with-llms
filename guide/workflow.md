@@ -2,15 +2,15 @@
 
 ## By the time you code, the thinking is done
 
-If you have a good issue, the hard decisions should already be made. The project's goals, what this task is for, how it fits the bigger picture, the rough shape of the implementation: all of that was settled with your team when you wrote the Github issue. When you sit down to actually run the agent, you should not be rediscovering what the issue is trying to accomplish.
+If you have a good issue, the hard decisions should already be made. The project's goals, what this task is for, how it fits the bigger picture, the rough shape of the implementation: all of that was settled with your team when you wrote the GitHub issue. When you sit down to actually run the agent, you should not be rediscovering what the issue is trying to accomplish.
 
 So if you find yourself deeply uncertain about what to build once coding starts, take it as a signal that the planning wasn't finished. You have two options. Go back to the issue phase and spend more time on it with your team, or, if the work is genuinely exploratory and the uncertainty is the whole point, handle it as an exploratory task (see the bottom of this page).
 
 ## What should happen, and who makes it happen
 
-The core loop is small: the agent writes a spec from your issue and the current code, an implementer builds to that spec, and a fresh agent reviews the result against it. The README walks the full sequence; the point here is that there is more than one way to make that loop happen.
+The core loop is small: the agent writes a spec from your issue and the current code, an implementer builds to that spec, and a fresh agent reviews the result against it. [Start Here](START-HERE.md) walks the full sequence; the point here is that there is more than one way to make that loop happen.
 
-- **Prompt it yourself**, step by step. Fine for small tasks, but you're holding the structure in your head.
+- **Prompt it yourself, step by step.** Fine for small tasks, but you're holding the structure in your head.
 - **Let the harness drive it.** A plugin like superpowers runs the whole spec, implement, and review loop for you.
 - **Write a skill that constrains it.** When you want the loop to run the same way every time, wrap it in a skill of your own. Our MMGIS [orchestrating-issues](https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/orchestrating-issues) skill is one example you can build from: it takes an issue all the way to a draft PR, hands the spec, implementation, and review off to the harness, and stops for you at the few gates that actually need a human.
 
@@ -36,4 +36,4 @@ Once you are happy with it, the change goes to your team, which is its own loop.
 
 Sometimes you genuinely don't know how a task should be done, and finding out is the task. The workflow still applies, you just specify a different thing up front. Instead of the implementation, you specify the parameters: how you'll judge the result, what you want to explore, and the pathways worth trying. With that clear, it's easy to spawn several agents in parallel down different paths, gather their reports, and compare them against your baseline.
 
-It's helpful to think of your coding harness as a team of dedicated researchers and consider what would would want actual humans to be researching, writing down, and verifying. Don't just say, "research this topic". Propose what sources it should use, have it create cited research documents, cross reference two agents against each other, have them build a results dashboard for you to review the work, etc.
+It's helpful to think of your coding harness as a team of dedicated researchers and consider what you would want actual humans to be researching, writing down, and verifying. Don't just say, "research this topic". Propose what sources it should use, have it create cited research documents, cross reference two agents against each other, have them build a results dashboard for you to review the work, etc.

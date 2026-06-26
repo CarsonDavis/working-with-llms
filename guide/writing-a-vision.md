@@ -9,7 +9,7 @@ What goes in a `vision.md` is unique to each project, but you need to remember w
 - Building the wrong thing, because it solved a misunderstood problem and never saw the real goal.
 - Mis-sizing the solution, over-engineering something that should be simple or under-building something load-bearing.
 - Ignoring a hard constraint (cost, scale, compliance) it had no way of knowing existed.
-- Gold-plating plating features nobody asked for.
+- Gold-plating features nobody asked for.
 
 None of these are the model writing bad code. The code is probably fine. They're the model writing code that's wrong for your project, because it never had the project's direction in front of it.
 

@@ -8,7 +8,7 @@ It is not trying to teach you everything about LLMs, but it gives you a solid fo
 
 ## How to use it
 
-Read **[Start Here](START-HERE.md)** in its entirety. 
+Read **[Start Here](START-HERE.md)** in its entirety.
 
 Do not skim it.
 
@@ -16,4 +16,4 @@ It is short, and it walks the whole approach end to end. If you want more detail
 
 ## The tools
 
-The universal skills and agents this guide points to live in the [llm-tools](https://github.com/NASA-IMPACT/llm-tools) repo. Other, project-specific skills will be linked to in their respective docs. 
+The universal skills and agents this guide points to live in the [llm-tools](https://github.com/NASA-IMPACT/llm-tools) repo. Other, project-specific skills will be linked to in their respective docs.

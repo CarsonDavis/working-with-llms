@@ -21,7 +21,7 @@ Everyone on the team, regardless of coding knowledge, should be able to understa
 
 ## Why motivation
 
-There is some content that should aways go in a document intended for LLMs that we rarely put in documents intended for humans. One of those is the motivation section. 
+There is some content that should always go in a document intended for LLMs that we rarely put in documents intended for humans. One of those is the motivation section.
 
 Motivation is something implicit that all the human devs know, and which silently drives the details of our implementation plans. If you don't tell the LLM why you are doing something and how it fits into the bigger picture, then don't be surprised when it comes up with a stupid way of implementing the task.
 

@@ -19,9 +19,9 @@ Here's the loop superpowers runs when you hand it a task:
 
 All of this runs in an isolated git worktree, so several tasks can go at once without stepping on each other.
 
-You can also delegate portions do different models, for example the spec and the review to your most expensive and capable model while a cheaper, faster one does the typing in the middle.
+You can also delegate portions to different models, for example the spec and the review to your most expensive and capable model while a cheaper, faster one does the typing in the middle.
 
-Superpowers does plenty more in the same spirit (systematic debugging before proposing fixes, structured handling of review feedback, a clean merge-and-cleanup step at the end), so explore all its capabilities. 
+Superpowers does plenty more in the same spirit (systematic debugging before proposing fixes, structured handling of review feedback, a clean merge-and-cleanup step at the end), so explore all its capabilities.
 
 ## What we use
 
