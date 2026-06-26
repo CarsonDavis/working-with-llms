@@ -1,14 +1,19 @@
-# llm-conventions
+# Working With LLMs
 
-A small, opinionated set of documents and processes for using LLMs effectively on a team — the shared, written artifacts that give a coding agent (and a new teammate) the context a senior engineer carries in their head.
+An actionable guide to doing software development with coding agents.
 
-This repo is the working space for distilling a team discussion into a usable convention set. Read in this order:
+Modern agents write good code. The hard part is getting them to build the *right* thing, the *right* way, for your project. This guide is how we do that.
 
-1. **[`docs/vision.md`](docs/vision.md)** — why this work exists and what we're building. Start here.
-2. **[`docs/source-documents/pruned-extractions.md`](docs/source-documents/pruned-extractions.md)** — the actionable, numbered inventory: documents, processes, and LLM issues worth designing around.
-3. **[`standard-artifacts/overview.md`](standard-artifacts/overview.md)** — first draft of the core document set: what each solves, what goes in it, how to write one, and how a team uses it. Open decisions live at the bottom.
-4. **[`standard-artifacts/review.md`](standard-artifacts/review.md)** and **[`standard-artifacts/tutorial.md`](standard-artifacts/tutorial.md)** — detailed working notes the overview points to for the review harness and the codebase tutorial.
+It is not trying to teach you everything about LLMs, but it gives you a solid foundation to start from: specific recommendations for how to work, and specific tools we have built (skills and agent pipelines) that you will find useful along the way.
 
-## Status
+## How to use it
 
-Draft. Next step is to pilot the smallest useful slice (a vision document + well-formed issues) on our own projects, live with it, and improve the harness where it falls short.
+Read **[Start Here](guide/START-HERE.md)** in its entirety.
+
+Do not skim it.
+
+It is short, and it walks the whole approach end to end. If you want more detail on a particular piece, follow that section's link into its child document.
+
+## The tools
+
+The universal skills and agents this guide points to live in the [llm-tools](https://github.com/NASA-IMPACT/llm-tools) repo. Other, project-specific skills will be linked to in their respective docs.
