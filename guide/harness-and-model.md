@@ -10,7 +10,7 @@ Don't chase leaderboards: the "best" model changes every few weeks, and the gap 
 
 A raw model is a fancy next-word predictor. Give it a feature to build and it might start strong, drift halfway through, and then hand you something almost-but-not-quite right. A harness fixes that by turning "build me this" into a gated pipeline: each step is pinned to something concrete, and nothing moves forward until it checks out.
 
-Many on our team run a stack of harnesses: Claude Code on top of Opus 4.8, and then [pcvelz/superpowers](https://github.com/pcvelz/superpowers) on top of that. 
+Many on our team run a stack of harnesses: Claude Code on top of Opus 4.8, and then [pcvelz/superpowers](https://github.com/pcvelz/superpowers) on top of that.
 
 Here's the loop the superpowers harness runs when you hand it a task:
 

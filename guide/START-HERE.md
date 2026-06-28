@@ -8,7 +8,7 @@ So when working with LLMs you have a few clear responsibilities:
 
 1. **Use a capable model** that writes quality code
 2. **Use a quality harness** that writes specs, follows instructions, does code reviews, orchestrates sessions, and provides guardrails
-3. **Provide context to the model** so it writes code not only "does the task" but aligns with your project's vision, your codebase's architecture, and your software engineering standards
+3. **Provide context to the model** so it writes code that not only "does the task" but aligns with your project's vision, your codebase's architecture, and your software engineering standards
 
 ---
 
@@ -20,13 +20,13 @@ So when working with LLMs you have a few clear responsibilities:
 
 Many on our team have had good experience using the Claude Code harness on top of the model Opus 4.8, and then layering the pcvelz/superpowers harness on top of that.
 
-Harnesses and models improve and change over time, and exact recommendations go out of date within months of being written. Don't stress about using the bleeding edge as long as you're using something.  → **[more on harnesses and models](harness-and-model.md)**
+Harnesses and models improve and change over time, and exact recommendations go out of date within months of being written. Don't stress about using the bleeding edge as long as you're using something. → **[more on harnesses and models](harness-and-model.md)**
 
 ---
 
 ## 2. Understand the work, then make that understanding available to the agent
 
-If *you* don't understand what your project is, what it's for, what you're building, and how it integrates with the rest of your services...then you can't tell an LLM those things, and you will not get good results. 
+If *you* don't understand what your project is, what it's for, what you're building, and how it integrates with the rest of your services...then you can't tell an LLM those things, and you will not get good results.
 
 Trying to re-tell an LLM every detail it needs within every chat is a losing battle, so what we try to do is embed much of the understanding ahead of time within the appropriate level of the project.
 
@@ -44,9 +44,9 @@ An agent will _not_ read every file in your repo, which means it will often over
 
 If you already have a clean, modular, predictable, and convention-following repo, you will need little documentation, because it will behave the way an agent expects. However, if you have a convoluted, legacy, or spaghetti repo, it likely has interactions a senior dev might know but a new contributor (human _or_ LLM) would miss. Those gotchas, patterns, and interactions must be written down so the agent doesn't make naive mistakes or choose bad implementations.
 
-Therefor, scale your documentation to the need. If your repo is small and well-structured, maybe all you need is a top-level README. If it's big, but modular and clean, maybe you can make due with hierarchical per-module READMEs and an `architecture.md`. If it is gnarly, legacy, spaghetti code, maybe you need an entire tutorial system. Your job is to think clearly about your own codebase and choose the appropriate level of documentation that needs to be generated and inserted into the context window of the agent.
+Therefore, scale your documentation to the need. If your repo is small and well-structured, maybe all you need is a top-level README. If it's big, but modular and clean, maybe you can make do with hierarchical per-module READMEs and an `architecture.md`. If it is gnarly, legacy, spaghetti code, maybe you need an entire tutorial system. Your job is to think clearly about your own codebase and choose the appropriate level of documentation that needs to be generated and inserted into the context window of the agent.
 
-It might also be necessary to modernize your thinking about cost. Documenting a repo used to take weeks; now an agent can do in hours. It is trivial to spawn subagents to study the files, consolidate, cross-reference, synthesize and have something better than any human would have written. Docs are cheap to create and are cheap to keep current, all you need is to keep them short enough for humans to read and to make maintaining them a core part of your coding workflow.
+It might also be necessary to modernize your thinking about cost. Documenting a repo used to take weeks; now an agent can do it in hours. It is trivial to spawn subagents to study the files, consolidate, cross-reference, synthesize and have something better than any human would have written. Docs are cheap to create and are cheap to keep current, all you need is to keep them short enough for humans to read and to make maintaining them a core part of your coding workflow.
 
 **Critical:** anything you give the agent it will take at face value as truth, so docs are first-class artifacts, not afterthoughts. Read them, understand them, and stand behind them. If your team is not reviewing and understanding the documentation then you are wasting your time. Feed garbage in and you will get garbage out. Keep your docs short and informative enough to make this easy for the team but useful for the agent. → **[how to document your codebase](codebase-docs.md)**
 
@@ -80,14 +80,14 @@ Once your team has a clear vision, sufficient documentation, and a well-formed i
 2. Then it reads the **repo docs** the team crafted.
 3. Then it reads the **task** the team carefully wrote.
 4. The harness writes a detailed **specification** from its own fresh exploration of the code.
-5. An **implemention agent** builds to that spec.
+5. An **implementation agent** builds to that spec.
 6. A **review agent** checks the implementation against the spec, looks for other problems, and reports back when the code is ready to show you.
 
 Then it's your turn.
 - **Smoke-test** that the features work. Check that you like them.
-- **Read the code** and confirm it's written the way you wanted. 
-- **Understand the code** Understanding the code isn't optional. When you don't fully understand what the code is doing, it's still your job to learn it (a **diff-explainer** tool helps here). 
-- **Iterate and deliver** Iterate until you're happy, then hand it to the team for final review. 
+- **Read the code** and confirm it's written the way you wanted.
+- **Understand the code.** Understanding the code isn't optional. When you don't fully understand what the code is doing, it's still your job to learn it (a **diff-explainer** tool helps here).
+- **Iterate and deliver.** Iterate until you're happy, then hand it to the team for final review.
 
 **[tips for orchestrating a workflow](workflow.md)**
 
