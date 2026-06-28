@@ -1,6 +1,6 @@
 # The Workflow
 
-## By the time you code, the thinking is done
+## By the time you code, the thinking should be done
 
 If you have a good issue, the hard decisions should already be made. The project's goals, what this task is for, how it fits the bigger picture, the rough shape of the implementation: all of that was settled with your team when you wrote the GitHub issue. When you sit down to actually run the agent, you should not be rediscovering what the issue is trying to accomplish.
 
@@ -14,23 +14,23 @@ The core loop is small: the agent writes a spec from your issue and the current 
 - **Let the harness drive it.** A plugin like superpowers runs the whole spec, implement, and review loop for you.
 - **Write a skill that constrains it.** When you want the loop to run the same way every time, wrap it in a skill of your own. Our MMGIS [orchestrating-issues](https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/orchestrating-issues) skill is one example you can build from: it takes an issue all the way to a draft PR, hands the spec, implementation, and review off to the harness, and stops for you at the few gates that actually need a human.
 
-One fair warning on that last option: orchestration skills tend to be specific to one repo, because they encode how *you* deploy, *your* conventions, and *your* gotchas. Use someone else's as a starting point, not a drop-in.
+One fair warning on that last option: orchestration skills tend to be mildy specific to one repo, because they encode how *you* deploy, *your* conventions, and *your* gotchas. Use someone else's as a starting point, not a drop-in.
 
-## Complicated repos: make it run many at once
+## Parrallel agents
 
 If your repo is gnarly, it's often worth spending a little time up front refactoring it so you can run several instances side by side on your own machine. That is what unlocks working several issues in parallel without them colliding. Our MMGIS [mmgis-deployment](https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/mmgis-deployment) skill is one example of how this was done: each instance gets its own port, database, and config, so many of them coexist cleanly on one machine between different git worktrees.
 
+This is especially useful for keeping issues (and therefor PRs) small. If your orchestration agent can work on several interconnected issues in parallel, it becomes much easier to develop, bugfix, review, and smoketest interdependent features without needing to shove them into a single giant PR.
+
 ## You still own the result
 
-You want to watch the agent write the spec, write the code, and run its own review. But none of that is your seal of approval. When it hands you a finished product, it is still your job to run it locally, confirm it actually does what it should, and read the code yourself. The agent passing its own tests does not mean the code is good. You have to look.
+Agents are great, and they will write the spec, write the code, and run their own review. But none of that is your seal of approval. When it hands you a finished product, it is still your job to run it locally, confirm it actually does what it should, and read the code yourself. The agent passing its own tests does not mean the code is good. You have to look.
 
 ## Learning code you didn't write
 
 As agents get more capable, they will write code in areas you are not deeply familiar with. That does not excuse you from understanding it. Be willing to Google things, read the real documentation, and ask the agent to explain how its own code works.
 
-One tool we've found effective is the [diff-explainer](https://github.com/CarsonDavis/diff-explainer). It is not a review agent. It walks you through what a diff does, what it affects, and how it fits into the rest of the codebase, side by side with the actual code, so you can get to genuine understanding and then make your own call.
-
-Once you are happy with it, the change goes to your team, which is its own loop. → [review-loop.md](review-loop.md)
+One tool we've found effective is the [diff-explainer](https://github.com/CarsonDavis/diff-explainer). It is not a review agent. It walks you through what a diff does, what it affects, and how it fits into the rest of the codebase, side by side with the actual code, so you can get to a genuine understanding and then make your own call.
 
 ## Exploratory tasks
 

@@ -2,7 +2,7 @@
 
 ## Avoid the interrogation anti-pattern
 
-The bad way to write an issue is to open a chat window, type one sentence, and let the bot interrogate you back and forth forever while you carry all the cognitive load, until it finally builds something that's sort of what you wanted...Don't do that.
+The bad way to write an issue is to open a chat window, type one sentence, and let the bot interrogate you back and forth forever while you carry all the cognitive load, until it finally builds something that is only sort of what you wanted...Don't do that.
 
 Bring a rough idea to your team, hash it out with the people who know the app until you share an understanding, then turn on your microphone and capture that shared understanding in one pass. Let more than one person talk; if the first misses something, the next fills it in.
 
@@ -15,7 +15,7 @@ The skill we use writes the issue in two layers
 - A clean, code-free top layer the human owns: the motivation, what the task is, and how you'll know it's done. Written to survive refactors, with no file paths or function names that rot, so a reviewer who has never opened the repo can understand the work and judge whether it's the right thing.
 - A collapsed, commit-pinned implementation sketch the agent owns: the rough plan from reading the code, plus any genuine gotchas, stamped with the commit it was written against.
 
-The pinning matters because of timing. You might plan an issue at the start of the week and implement it days later, and the code moves in between. Agents follow stale instructions exactly as faithfully as good ones, right off a cliff, so you don't want an over-specified plan full of exact line numbers and code that will be wrong by the time someone picks it up.
+The pinning matters because of timing. You might plan an issue at the start of the week and implement it days later, and the code moves in between. Agents follow stale instructions exactly as faithfully as good ones (right off a cliff) so you don't want an over-specified plan full of exact line numbers and code that will be wrong by the time someone picks it up.
 
 Everyone on the team, regardless of coding knowledge, should be able to understand and approve the top sections of the issue. The implementation plan should be sanity checked by whoever is deepest in the codebase.
 
@@ -37,7 +37,9 @@ For a real example, look at how one piece of MMGIS test work got split into [#14
 
 Writing good issues and fully understanding them takes time. This will take longer than you are used to.
 
-The trade is a little more time up front for much less time overall. Fifteen, maybe twenty minutes on an issue buys you a task so well-scoped and well-understood that you can finish several of them in a day, with no foreseeable surprises left at the end. But it only works if you actually read what the agent drafted. If you don't own the spec it's about to implement, you don't own anything.
+The trade is a little more time up front for much less time overall. Fifteen, maybe twenty minutes on an issue buys you a task so well-scoped and well-understood that you can finish several of them in a day, with no foreseeable surprises left at the end. And when it comes time to do code review, everyone is already familiar with the task.
+
+But this beautiful process only works if you actually read what the agent drafted. If you don't own the spec it's about to implement, you don't own anything.
 
 ## The skill
 

@@ -2,7 +2,9 @@
 
 ## What a good vision prevents
 
-An agent has no idea what your project is doing, who it is for, or what it should accomplish. If you ask it to go do a task blind, it will sometimes do it in a way that defeats the entire purpose of your repo. The fix is easy. Tell your agent about your project.
+An agent has no idea what your project is doing, who it is for, or what it should accomplish. If you ask it to go do a task blind, it will sometimes do it in a way that defeats the entire purpose of your repo.
+
+The fix is easy. Tell your agent about your project.
 
 What goes in a `vision.md` is unique to each project, but you need to remember what problem you are trying to solve. Agents will write excellent code that absolutely doesn't do what you wanted. Think about the kinds of things that happen:
 
@@ -17,7 +19,7 @@ None of these are the model writing bad code. The code is probably fine. They're
 
 You don't have to labor over this. The fastest way is to word-vomit it: the people who actually hold the vision talk for ten or fifteen minutes about everything that matters, into speech-to-text, and let the LLM organize it into a draft. Point it at related repos or existing material if that helps.
 
-Then read the draft by hand and edit it. This is the step you never skip. Every downstream decision is grounded on this document, so it has to be right, and you are the owner. The LLM is just helping you write.
+Then read the draft by hand and edit it. *Do not skip this.* Every downstream decision is grounded on your vision, so it has to be right, and you are the owner. The LLM is just helping you write.
 
 Keep it to a page or two. If your vision is more than two pages, the detail you're adding probably belongs downstream in requirements or architecture, not here. Aim for the shortest document that can still settle a "which way should I build this?" question correctly.
 
@@ -27,4 +29,4 @@ It's a tracked artifact. The project owner approves it and owns it. The agent re
 
 ## The skill
 
-We have a skill that runs this for you. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/NASA-IMPACT/llm-tools/tree/main/skills/writing-a-vision)
+We have a skill that helps you write a vision.md. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/NASA-IMPACT/llm-tools/tree/main/skills/writing-a-vision)
