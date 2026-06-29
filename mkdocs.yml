@@ -4,7 +4,6 @@ site_url: https://madebycarson.com/working-with-llms/
 
 repo_name: CarsonDavis/working-with-llms
 repo_url: https://github.com/CarsonDavis/working-with-llms
-edit_uri: edit/main/guide/
 
 docs_dir: guide
 
@@ -34,7 +33,6 @@ theme:
     - navigation.instant
     - navigation.top
     - navigation.footer      # previous / next page links
-    - content.action.edit    # "edit this page" pencil
     - content.code.copy
     - toc.follow
   icon:
