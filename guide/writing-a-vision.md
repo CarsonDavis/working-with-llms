@@ -25,8 +25,8 @@ Keep it to a page or two. If your vision is more than two pages, the detail you'
 
 ## How to operate it
 
-It's a tracked artifact. The project owner approves it and owns it. The agent reads it on every task; human contributors read it before they contribute. When a stakeholder decision changes, the vision changes and the downstream docs follow. And when the LLM ships something deeply misaligned, the fix usually belongs here: the vision didn't say enough, so say it, and the next session won't repeat the mistake.
+It's a tracked artifact. The project owner approves it and owns it. The agent reads it on every task. Human contributors read it before they contribute. When a stakeholder decision changes, the vision changes and the downstream docs follow. And when the LLM ships something deeply misaligned, the fix usually belongs here.
 
 ## The skill
 
-We have a skill that helps you write a vision.md. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/NASA-IMPACT/llm-tools/tree/main/skills/writing-a-vision)
+We have a skill that helps you write a vision.md. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/CarsonDavis/claude/tree/master/skills/writing-a-vision)
