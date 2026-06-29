@@ -1,9 +1,9 @@
 site_name: Working With LLMs
 site_description: An actionable guide to doing software development with coding agents.
-site_url: https://nasa-impact.github.io/llm-conventions/
+site_url: https://carsondavis.github.io/working-with-llms/
 
-repo_name: NASA-IMPACT/llm-conventions
-repo_url: https://github.com/NASA-IMPACT/llm-conventions
+repo_name: CarsonDavis/working-with-llms
+repo_url: https://github.com/CarsonDavis/working-with-llms
 edit_uri: edit/main/guide/
 
 docs_dir: guide
