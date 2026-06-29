@@ -26,6 +26,6 @@ Not every agent fits every repo. Start with the ones a given project needs and a
 
 You don't have to start designing custom review agents from a blank page.
 
-We have a tool that spawns agents to read through every review comment ever left on a repo across its whole history, verifies each one against the actual code (a comment existing doesn't mean it mattered, and a comment being made doesn't mean it was acted on), and synthesizes a report of candidate review guidelines. It lives in the llm-tools repo as the [`learn-from-pr-reviews`](https://github.com/NASA-IMPACT/llm-tools/tree/main/skills/learn-from-pr-reviews) skill.
+We have a tool that spawns agents to read through every review comment ever left on a repo across its whole history, verifies each one against the actual code (a comment existing doesn't mean it mattered, and a comment being made doesn't mean it was acted on), and synthesizes a report of candidate review guidelines. It lives in the claude repo as the [`learn-from-pr-reviews`](https://github.com/CarsonDavis/claude/tree/master/skills/learn-from-pr-reviews) skill.
 
 Treat its results only as a starting point. You are responsible for what goes into the agent, so read it carefully, delete what's wrong, add what you want, and grow it into a custom review.md skill you distribute to the team. It improves with the repo and applies to agent-written and human-written code alike.
