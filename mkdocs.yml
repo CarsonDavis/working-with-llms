@@ -1,0 +1,75 @@
+site_name: Working With LLMs
+site_description: An actionable guide to doing software development with coding agents.
+site_url: https://nasa-impact.github.io/llm-conventions/
+
+repo_name: NASA-IMPACT/llm-conventions
+repo_url: https://github.com/NASA-IMPACT/llm-conventions
+edit_uri: edit/main/guide/
+
+docs_dir: guide
+
+extra_css:
+  - stylesheets/extra.css
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.top
+    - navigation.footer      # previous / next page links
+    - content.action.edit    # "edit this page" pencil
+    - content.code.copy
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Start Here: START-HERE.md
+  - Harness & Model: harness-and-model.md
+  - Writing a Vision: writing-a-vision.md
+  - Codebase Docs: codebase-docs.md
+  - Writing an Issue: writing-an-issue.md
+  - The Workflow: workflow.md
+  - The Review Loop: review-loop.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.details
+
+# Search is intentionally disabled (empty list overrides MkDocs' default
+# `search` plugin), which removes the header search box.
+plugins: []
+
+# Build the site home page from README.md (single source of truth).
+hooks:
+  - hooks/home_from_readme.py
+
+# Live-reload the home when README changes during `mkdocs serve`
+# (README lives outside docs_dir, so it isn't watched by default).
+watch:
+  - README.md

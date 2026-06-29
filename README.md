@@ -14,6 +14,8 @@ Do not skim it.
 
 It is short, it is concise, and it walks the whole approach end to end. If you want more detail on a particular piece, follow that section's link into its child document.
 
+<!-- site-button | Start Here → | START-HERE.md -->
+
 ## The tools
 
 The universal skills and agents this guide points to live in the [llm-tools](https://github.com/NASA-IMPACT/llm-tools) repo. Project-specific skills will be linked to in their respective docs.

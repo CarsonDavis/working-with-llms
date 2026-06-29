@@ -1,0 +1,58 @@
+/* Streamlined UI: slimmer bars and a more compact button.
+   Header note: the bar height is driven by .md-header__title's height +
+   line-height. They MUST stay equal or the title text loses vertical
+   centering. Everything in .md-header__inner is flex-centered, so as long
+   as each child is internally consistent the alignment holds. */
+
+/* --- Header bar color: exactly match the footer. We reuse Material's footer
+   background variable so the top and bottom bars are identical, and leave
+   `primary` as blue so body links and the primary button keep their blue. --- */
+.md-header {
+  background-color: var(--md-footer-bg-color);
+}
+
+/* --- Top header bar (default ~2.4rem -> ~1.6rem). Search is removed, so
+   the title height alone drives the bar height. Keep height == line-height
+   so the title text stays vertically centered. --- */
+.md-header__title {
+  height: 1.6rem;
+  line-height: 1.6rem;
+  font-size: 0.8rem;
+}
+.md-header__button {
+  margin: 0.1rem;
+  padding: 0.25rem;
+}
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 0.95rem;
+}
+
+/* --- Primary "Start Here" button --- */
+.md-typeset .md-button {
+  padding: 0.3em 0.95em;
+  font-size: 0.68rem;
+  font-weight: 600;
+  border-width: 1px;
+}
+
+/* --- Prev/next footer bar --- */
+.md-footer__link {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.md-footer__title {
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+.md-footer__direction {
+  font-size: 0.58rem;
+}
+/* --- "Made with Material" meta strip --- */
+.md-footer-meta__inner {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.md-footer-meta {
+  font-size: 0.62rem;
+}
