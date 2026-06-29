@@ -4,7 +4,7 @@
 
 If you have a good issue, the hard decisions should already be made. The project's goals, what this task is for, how it fits the bigger picture, the rough shape of the implementation: all of that was settled with your team when you wrote the GitHub issue. When you sit down to actually run the agent, you should not be rediscovering what the issue is trying to accomplish.
 
-So if you find yourself deeply uncertain about what to build once coding starts, take it as a signal that the planning wasn't finished. You have two options. Go back to the issue phase and spend more time on it with your team, or, if the work is genuinely exploratory and the uncertainty is the whole point, handle it as an exploratory task (see the bottom of this page).
+So if you find yourself deeply uncertain about what to build once coding starts, that probably means the planning wasn't finished. Either go back to the issue phase and spend more time on it with your team, or, if the work is genuinely exploratory and the uncertainty is the whole point, handle it as an exploratory task (see the bottom of this page).
 
 ## What should happen, and who makes it happen
 
