@@ -1,0 +1,589 @@
+---
+layout: base.njk
+title: Working With LLMs — Workshop
+pageTitle: Working With LLMs — a live workshop
+dek: The visual aid for a live 30–60 minute workshop on doing software development with coding agents.
+---
+
+<!-- =====================================================================
+     ACT 0 — THE HOOK  (≈3 min)
+     ===================================================================== -->
+<section id="hook" data-scene data-act="00" data-title="The Hook" style="--scene-h:100vh">
+  <div class="scene-stage scene-stage--hero">
+    <div class="scene-inner">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.08">ACT 0 <span class="act-name">— THE HOOK</span></p>
+      <p class="eyebrow" data-reveal data-from="0" data-to="0.1">A Workshop &middot; Working With LLMs</p>
+      <h1 class="headline" data-reveal data-from="0.02" data-to="0.16">Modern agents write good code.</h1>
+      <p class="lede" data-reveal data-from="0.24" data-to="0.4">The hard part is getting them to build the <em class="accent-blue">right</em> thing, the <em class="accent-teal">right</em> way, for <em class="accent-amber">your</em> project.</p>
+      <p class="hint-line" data-reveal data-from="0.55" data-to="0.72" data-dir="d">scroll &darr; &middot; press ? for keys</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 3 MIN</span></p>
+        <div class="notes-body">
+          <p>Open with the guide's own thesis, from the README: &ldquo;This guide will not try to teach you everything you will ever need to know about LLMs, but it will give you a solid foundation to start from &mdash; specific recommendations for how to work and specific tools we have built that you will find useful along the way.&rdquo;</p>
+          <p>Frame the session: this workshop walks the same ground the written guide covers &mdash; <code>README.md</code> and the <code>guide/</code> docs &mdash; live, section by section, instead of read top to bottom. The slides carry headlines and quotable lines; these notes carry the rest of what to say.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="the-question" data-scene data-act="00" data-title="The Question" style="--scene-h:260vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.12">In 2026, the question is no longer <em>can an LLM write good Python?</em></h2>
+      <ul class="accent-trio-list" data-reveal data-from="0.2" data-to="0.3">
+        <li class="beat accent-blue" data-reveal data-from="0.22" data-to="0.32">does it do what you actually wanted</li>
+        <li class="beat accent-teal" data-reveal data-from="0.34" data-to="0.44">does it fit the whole project</li>
+        <li class="beat accent-amber" data-reveal data-from="0.46" data-to="0.56">does it respect the constraints</li>
+      </ul>
+      <p class="beat-large" data-reveal data-from="0.68" data-to="0.82">When an agent writes bad code, it usually wasn&rsquo;t the model. It was missing instructions and context.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 3 MIN</span></p>
+        <div class="notes-body">
+          <p>Read the START-HERE opening near-verbatim: &ldquo;Modern agentic coding systems are extremely good at following instructions. When you see them write bad code, it is probably not because the technology is bad, but instead because they didn&rsquo;t have sufficient instructions and context for the task.&rdquo;</p>
+          <p>&ldquo;In 2026, the question is no longer, &lsquo;can an LLM write good Python?&rsquo; The question is whether the code does what you actually wanted, fits the whole project, and respects the constraints a senior engineer knows implicitly.&rdquo;</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT I — GOOD CODE ISN'T ENOUGH  (≈5 min)
+     ===================================================================== -->
+<section id="failures" data-scene data-act="01" data-title="Good Code Isn&rsquo;t Enough" style="--scene-h:300vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.06">ACT I <span class="act-name">— GOOD CODE ISN&rsquo;T ENOUGH</span></p>
+      <div class="card-grid" style="text-align:left">
+        <div class="card" data-reveal data-from="0.14" data-to="0.24" data-dir="u">
+          <p class="card-title">Built the wrong thing</p>
+          <p class="card-dek">Solved a misunderstood problem.</p>
+        </div>
+        <div class="card" data-reveal data-from="0.22" data-to="0.32" data-dir="u">
+          <p class="card-title">Mis-sized it</p>
+          <p class="card-dek">Over-engineered the simple, under-built the load-bearing.</p>
+        </div>
+        <div class="card" data-reveal data-from="0.3" data-to="0.4" data-dir="u">
+          <p class="card-title">Ignored a hard constraint</p>
+          <p class="card-dek">Cost, scale, compliance.</p>
+        </div>
+        <div class="card" data-reveal data-from="0.38" data-to="0.48" data-dir="u">
+          <p class="card-title">Gold-plated</p>
+          <p class="card-dek">Features nobody asked for.</p>
+        </div>
+      </div>
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.66" data-to="0.8">None of these are the model writing bad code. The code is probably fine.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 5 MIN</span></p>
+        <div class="notes-body">
+          <p>From writing-a-vision, &ldquo;What a good vision prevents&rdquo;: an agent has no idea what your project is doing, who it is for, or what it should accomplish. If you ask it to go do a task blind, it will sometimes do it in a way that defeats the entire purpose of your repo. The fix is easy &mdash; tell your agent about your project.</p>
+          <p>Agents will write excellent code that absolutely doesn&rsquo;t do what you wanted: building the wrong thing, because it solved a misunderstood problem and never saw the real goal; mis-sizing the solution, over-engineering something that should be simple or under-building something load-bearing; ignoring a hard constraint (cost, scale, compliance) it had no way of knowing existed; gold-plating features nobody asked for.</p>
+          <p>None of these are the model writing bad code &mdash; the code is probably fine. They&rsquo;re the model writing code that&rsquo;s wrong for your project, because it never had the project&rsquo;s direction in front of it.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT II — YOUR THREE JOBS  (≈5 min)
+     ===================================================================== -->
+<section id="three-jobs" data-scene data-act="02" data-title="Your Three Jobs" style="--scene-h:260vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.06">ACT II <span class="act-name">— YOUR THREE JOBS</span></p>
+      <ol class="card-stack">
+        <li class="card" data-reveal data-from="0.16" data-to="0.28" data-dir="u">
+          <span class="card-num">01</span>
+          <span><span class="card-title">A capable model</span><span class="card-dek">Flagship &mdash; when in doubt, the most capable you have.</span></span>
+        </li>
+        <li class="card" data-reveal data-from="0.28" data-to="0.4" data-dir="u">
+          <span class="card-num">02</span>
+          <span><span class="card-title">A real harness</span><span class="card-dek">Specs, review, guardrails &mdash; not just a chat window.</span></span>
+        </li>
+        <li class="card" data-reveal data-from="0.4" data-to="0.52" data-dir="u">
+          <span class="card-num">03</span>
+          <span><span class="card-title">Context</span><span class="card-dek">Your vision, your architecture, your standards.</span></span>
+        </li>
+      </ol>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 5 MIN</span></p>
+        <div class="notes-body">
+          <p>From START-HERE: so when working with LLMs you have a few clear responsibilities &mdash; use a capable model that writes quality code; use a quality harness that writes specs, follows instructions, does code reviews, orchestrates sessions, and provides guardrails; and provide context to the model so it writes code that not only &ldquo;does the task&rdquo; but aligns with your project&rsquo;s vision, your codebase&rsquo;s architecture, and your software engineering standards.</p>
+          <p>On the model, from harness-and-model: for most tasks that aren&rsquo;t tightly bounded, use a powerful flagship model, and when in doubt reach for the most capable one you have. We have the most experience with Claude Opus 4.8, but the latest flagships from OpenAI and Gemini drop in just as well.</p>
+          <p>Don&rsquo;t chase leaderboards: the &ldquo;best&rdquo; model changes every few weeks, and the gap between the top flagships is almost never what makes or breaks a task. For small, mechanical, tightly-scoped work, a cheaper or faster model is often fine; for anything that needs real judgment or planning, use the strongest one available to you and give it access to as much quality context as you can.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="harness" data-scene data-act="02" data-title="The Harness" data-anim="pipeline" data-pipe-a="0.14" data-pipe-b="0.78" style="--scene-h:320vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">A raw model is a fancy next-word predictor.</h2>
+      <ol class="pipeline pipeline--row">
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">1</span>
+          <p>Spec first</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">2</span>
+          <p>Implement to the spec</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">3</span>
+          <p>Fresh-agent review</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">4</span>
+          <p>Verify</p>
+        </li>
+      </ol>
+      <p class="beat" style="margin-top:1.4em" data-reveal data-from="0.84" data-to="0.96">Nothing moves forward until it checks out.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 5 MIN</span></p>
+        <div class="notes-body">
+          <p>From harness-and-model, &ldquo;What a harness actually does for you&rdquo;: a raw model is a fancy next-word predictor. Give it a feature to build and it might start strong, drift halfway through, and then hand you something almost-but-not-quite right. A harness fixes that by turning &ldquo;build me this&rdquo; into a gated pipeline: each step is pinned to something concrete, and nothing moves forward until it checks out.</p>
+          <p>Many on our team run a stack of harnesses: Claude Code on top of Opus 4.8, and then <a href="https://github.com/pcvelz/superpowers">pcvelz/superpowers</a> on top of that. The loop it runs: <strong>spec first</strong> &mdash; it explores your actual code, asks you questions, proposes an approach, and writes a design spec; nothing gets built until you approve it. <strong>Implement to the spec</strong> &mdash; an agent types out the code by following that spec, instead of improvising from your one-line request. <strong>Review by a fresh agent</strong> &mdash; a second agent that did not write the code reads the diff against the spec: every requirement met? anything quietly added? anything misunderstood? <strong>Verify</strong> &mdash; tests can be written ahead of the code, and the code isn&rsquo;t done until it passes them.</p>
+          <p>You can run all of this in an isolated git worktree, so several tasks go at once without stepping on each other. You can also delegate portions to different models &mdash; for example the spec and the review to your most expensive and capable model while a cheaper, faster one does the typing in the middle. Superpowers does plenty more in the same spirit (systematic debugging before proposing fixes, structured handling of review feedback, a clean merge-and-cleanup step at the end). Install it with:</p>
+          <p><code>/plugin marketplace add pcvelz/superpowers</code><br><code>/plugin install superpowers-extended-cc@superpowers-extended-cc-marketplace</code></p>
+          <p><strong>Practical notes:</strong> run your agent on your actual machine, not in a browser tab &mdash; you want it in your real environment, with your tools and your repo, able to run and smoke-test what it builds. Harnesses and models both change fast; stay reasonably current, but don&rsquo;t agonize over it. The only rule that matters is to use a real harness and a capable model &mdash; which exact ones matter far less than the fact that you&rsquo;re using them at all.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT III — WHERE CONTEXT LIVES  (≈3 min)
+     ===================================================================== -->
+<section id="context-stack" data-scene data-act="03" data-title="Where Context Lives" data-anim="pipeline" data-pipe-a="0.18" data-pipe-b="0.86" style="--scene-h:260vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.06">ACT III <span class="act-name">— WHERE CONTEXT LIVES</span></p>
+      <p class="beat" data-reveal data-from="0.06" data-to="0.16">Re-telling the agent everything, every chat, is a losing battle.</p>
+      <p class="beat" data-reveal data-from="0.16" data-to="0.26">So embed the understanding in the project itself &mdash; at the right level.</p>
+
+      <div class="stack-diagram">
+        <p class="stack-diagram-title">Feeds the agent&rsquo;s context</p>
+        <div class="stack-layer" data-layer>
+          <div class="stack-layer-name">vision.md</div>
+          <div class="stack-layer-what">why</div>
+        </div>
+        <div class="stack-layer" data-layer>
+          <div class="stack-layer-name">codebase docs</div>
+          <div class="stack-layer-what">how it works</div>
+        </div>
+        <div class="stack-layer" data-layer>
+          <div class="stack-layer-name">the issue</div>
+          <div class="stack-layer-what">what to do</div>
+        </div>
+        <div class="stack-layer" data-layer>
+          <div class="stack-layer-name">CLAUDE.md</div>
+          <div class="stack-layer-what">the rules</div>
+        </div>
+        <div class="stack-arrow">&darr;</div>
+        <div class="stack-context-box">the agent&rsquo;s context window</div>
+      </div>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 3 MIN</span></p>
+        <div class="notes-body">
+          <p>From START-HERE §2, near-verbatim: if <em>you</em> don&rsquo;t understand what your project is, what it&rsquo;s for, what you&rsquo;re building, and how it integrates with the rest of your services, then you can&rsquo;t tell an LLM those things, and you will not get good results.</p>
+          <p>Trying to re-tell an LLM every detail it needs within every chat is a losing battle, so what we try to do is embed much of the understanding ahead of time within the appropriate level of the project. The next four scenes are the four places that understanding lives: <code>vision.md</code> (why), the codebase docs (how it works), the issue (what to do), and <code>CLAUDE.md</code> (the rules).</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT IV — THE FOUR ARTIFACTS  (≈20 min)
+     ===================================================================== -->
+<section id="vision" data-scene data-act="04" data-title="Vision" data-anim="pipeline" data-pipe-a="0.22" data-pipe-b="0.66" style="--scene-h:320vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.06">ACT IV <span class="act-name">— THE FOUR ARTIFACTS</span></p>
+      <h2 class="headline-sm" data-reveal data-from="0.06" data-to="0.16">Vision &mdash; why the project exists.</h2>
+
+      <ol class="mini-pipeline">
+        <li class="mini-pipeline-step" data-step>
+          <span class="mini-pipeline-dot">1</span>
+          <p>Word-vomit for 10&ndash;15 minutes</p>
+        </li>
+        <li class="mini-pipeline-step" data-step>
+          <span class="mini-pipeline-dot">2</span>
+          <p>The LLM organizes the draft</p>
+        </li>
+        <li class="mini-pipeline-step is-flag" data-step>
+          <span class="mini-pipeline-dot">3</span>
+          <p>You edit it &mdash; <strong>do not skip this</strong></p>
+        </li>
+      </ol>
+
+      <div class="chip-row" data-reveal data-from="0.72" data-to="0.86">
+        <span class="chip">a page or two, max</span>
+        <span class="chip">the agent reads it every task</span>
+        <span class="chip">misaligned output? fix it here</span>
+      </div>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 20 MIN</span></p>
+        <div class="notes-body">
+          <p>From START-HERE §2.1: a <code>vision.md</code> explains what a project is &mdash; its goals, who it serves, and how it fits into the wider org. It informs the big decisions: which architecture, how to implement, what to gold-plate versus ship as an MVP, which issues are even worth doing. Today this lives in managers&rsquo; and stakeholders&rsquo; or senior devs&rsquo; heads, or in a PowerPoint somewhere, or a Google doc &mdash; almost never in the repo where a coding agent can actually read it.</p>
+          <p>From writing-a-vision, &ldquo;How to write one&rdquo;: you don&rsquo;t have to labor over this. The fastest way is to word-vomit it &mdash; the people who actually hold the vision talk for ten or fifteen minutes about everything that matters, into speech-to-text, and let the LLM organize it into a draft. Point it at related repos or existing material if that helps. Then read the draft by hand and edit it. <strong>Do not skip this.</strong> Every downstream decision is grounded on your vision, so it has to be right, and you are the owner &mdash; the LLM is just helping you write. Keep it to a page or two: if your vision is more than two pages, the detail you&rsquo;re adding probably belongs downstream in requirements or architecture, not here.</p>
+          <p>&ldquo;How to operate it&rdquo;: it&rsquo;s a tracked artifact. The project owner approves it and owns it. The agent reads it on every task. Human contributors read it before they contribute. When a stakeholder decision changes, the vision changes and the downstream docs follow. And when the LLM ships something deeply misaligned, the fix usually belongs here.</p>
+          <p>We have a skill, writing-a-vision, that helps you write one: it hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft for you to edit. It&rsquo;s deliberately built so you still own and write the actual content; the skill only structures what you said.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="docs" data-scene data-act="04" data-title="Codebase Docs" data-anim="pipeline" data-pipe-a="0.12" data-pipe-b="0.6" style="--scene-h:340vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">Codebase docs &mdash; how the code actually works.</h2>
+
+      <div class="scale-rows">
+        <div class="scale-row" data-step>
+          <span class="scale-row-repo">small &amp; clean</span>
+          <span class="scale-row-arrow">&rarr;</span>
+          <span class="scale-row-doc">a README</span>
+        </div>
+        <div class="scale-row" data-step>
+          <span class="scale-row-repo">big but modular</span>
+          <span class="scale-row-arrow">&rarr;</span>
+          <span class="scale-row-doc">per-module READMEs + architecture.md</span>
+        </div>
+        <div class="scale-row" data-step>
+          <span class="scale-row-repo">gnarly legacy</span>
+          <span class="scale-row-arrow">&rarr;</span>
+          <span class="scale-row-doc">a full tutorial system</span>
+        </div>
+      </div>
+
+      <div class="chip-row" data-reveal data-from="0.66" data-to="0.78">
+        <span class="chip">too many tokens</span>
+        <span class="chip">big context &ne; good decisions</span>
+        <span class="chip">it only opens files it thinks it needs</span>
+        <span class="chip">the why isn&rsquo;t in the code</span>
+      </div>
+
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.86" data-to="0.98">Anything you give the agent, it takes at face value as truth.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 20 MIN</span></p>
+        <div class="notes-body">
+          <p>An agent will not read every file in your repo, which means it will often overlook or misunderstand things. Concise documentation it reads before starting work helps. If you already have a clean, modular, predictable, convention-following repo, you&rsquo;ll need little documentation. If you have a convoluted, legacy, or spaghetti repo, it likely has interactions a senior dev might know but a new contributor &mdash; human or LLM &mdash; would miss.</p>
+          <p><strong>What to capture:</strong> conventions specific to the repo; design patterns (&ldquo;models inherit from BaseEntity, which provides soft-delete and audit fields&rdquo;); non-obvious interactions (&ldquo;writes go through module A, but a separate indexer in module B keeps search current, and nothing in A imports B&rdquo;); common mistakes that reliably catch newcomers; the actual and intended architecture; and key design decisions and why you made them.</p>
+          <p><strong>Scale the format to the repo:</strong> small and well-structured needs a top-level README; bigger but modular and clean needs hierarchical per-module READMEs and maybe an <code>architecture.md</code>; large, legacy, or gnarly may need exhaustive docs or a full generated tutorial system. We have a working prototype for that last case, <a href="https://github.com/CarsonDavis/codebase-tutorial">codebase-tutorial</a>: point it at a repo and a multi-agent pipeline surveys the code, writes up each component in parallel, and synthesizes the pages into one coherent tutorial &mdash; plain markdown an agent can load as context, plus a reusable web frontend for humans. Reach for it only when simpler docs can&rsquo;t hold the picture or when onboarding a new team member.</p>
+          <p><strong>Why not just have the agent read the literal code?</strong> Too many tokens &mdash; a real codebase doesn&rsquo;t fit usefully in a context window. Big context does not equal good decisions &mdash; five thousand tokens of code might reduce to a sentence fact, and the agent acts on the sentence far more reliably than on the code. It only opens the files it thinks it needs &mdash; anything in a file it never reads is invisible to it. Code states intent implicitly &mdash; the &ldquo;why it&rsquo;s done this way&rdquo; isn&rsquo;t in the code, so the agent has to infer it and often misses your real reason.</p>
+          <p><strong>Authoring rules:</strong> no line numbers (they go stale the moment code moves); name real symbols &mdash; actual files and functions, not prose-only descriptions; remember the why; keep them living &mdash; regenerate and update as the code changes, and have CLAUDE.md tell the agent to update docs in the same PR as the code.</p>
+          <p><strong>You own the docs.</strong> Documenting used to take weeks; today an agentic swarm can do it in an hour, so it&rsquo;s no longer hard to make the docs &mdash; but you have to read them and own them. Anything you give the agent, it will take at face value as truth. Your docs are first-class artifacts, as load-bearing as the code. If your documents are too long to review, make them shorter.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="issue" data-scene data-act="04" data-title="The Issue" style="--scene-h:340vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.08">The issue &mdash; what to build, exactly.</h2>
+      <p class="beat" data-reveal data-from="0.1" data-to="0.2">Don&rsquo;t let the bot interrogate you.</p>
+
+      <div class="flow-row" data-reveal data-from="0.22" data-to="0.34">
+        <span class="chip">team hash-out</span>
+        <span class="flow-sep">&rarr;</span>
+        <span class="chip">mic on, brain-dump</span>
+        <span class="flow-sep">&rarr;</span>
+        <span class="chip">the skill researches the repo and drafts</span>
+      </div>
+
+      <div class="doc-diagram" data-reveal data-from="0.4" data-to="0.54">
+        <div class="doc-layer doc-layer-human">
+          <p class="doc-layer-label">The human&rsquo;s layer</p>
+          <p class="doc-layer-body">motivation, the task, done criteria &mdash; no file paths</p>
+        </div>
+        <div class="doc-layer doc-layer-agent">
+          <p class="doc-layer-label">The agent&rsquo;s layer (collapsed)</p>
+          <p class="doc-layer-body">commit-pinned implementation sketch</p>
+        </div>
+      </div>
+
+      <p class="beat" style="margin-top:1em" data-reveal data-from="0.64" data-to="0.74">A good issue should be one reviewable PR.</p>
+      <p class="beat" data-reveal data-from="0.8" data-to="0.9">Tell it <em>why</em>, or don&rsquo;t be surprised by <em>how</em>.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 20 MIN</span></p>
+        <div class="notes-body">
+          <p>The bad way to write an issue is to open a chat window, type one sentence, and let the bot interrogate you back and forth forever while you carry all the cognitive load, until it finally builds something that is only sort of what you wanted. Don&rsquo;t do that.</p>
+          <p>Bring a rough idea to your team, hash it out with the people who know the app until you share an understanding, then turn on your microphone and capture that shared understanding in one pass. Let more than one person talk; if the first misses something, the next fills it in. Hand that brain dump to the issue-writing skill. It reads it, pushes back where it has real questions or thinks the task should be split, researches your actual repository to check the issue is viable and surface gotchas, and drafts a clean issue.</p>
+          <p><strong>The two-layer issue:</strong> a clean, code-free top layer the human owns &mdash; the motivation, what the task is, and how you&rsquo;ll know it&rsquo;s done, written to survive refactors with no file paths or function names that rot, so a reviewer who has never opened the repo can understand the work and judge whether it&rsquo;s the right thing. And a collapsed, commit-pinned implementation sketch the agent owns &mdash; the rough plan from reading the code, plus any genuine gotchas, stamped with the commit it was written against. The pinning matters because of timing: you might plan an issue at the start of the week and implement it days later, and the code moves in between. Agents follow stale instructions exactly as faithfully as good ones &mdash; right off a cliff &mdash; so you don&rsquo;t want an over-specified plan full of exact line numbers that will be wrong by the time someone picks it up.</p>
+          <p><strong>Why motivation:</strong> motivation is something implicit that all the human devs know, and which silently drives the details of our implementation plans. If you don&rsquo;t tell the LLM why you are doing something and how it fits into the bigger picture, don&rsquo;t be surprised when it comes up with a stupid way of implementing the task.</p>
+          <p><strong>Right-size it:</strong> a good issue should be one reviewable PR. An LLM will casually write ten thousand lines of code if you ask it to, so don&rsquo;t. If the work sprawls across several independent pieces, the skill should say so and propose a breakdown. For a real example, one piece of MMGIS test work got split into <a href="https://github.com/NASA-IMPACT/MMGIS/issues/148">#148</a> (moving unit tests into a DOM-capable environment, pure mechanics) and <a href="https://github.com/NASA-IMPACT/MMGIS/issues/149">#149</a> (fixing the stale tests that migration revealed).</p>
+          <p><strong>The payoff:</strong> writing good issues and fully understanding them takes time &mdash; longer than you&rsquo;re used to. Fifteen, maybe twenty minutes on an issue buys you a task so well-scoped that you can finish several in a day with no foreseeable surprises, and everyone is already familiar with the task when it comes time to review. But this only works if you actually read what the agent drafted. If you don&rsquo;t own the spec it&rsquo;s about to implement, you don&rsquo;t own anything.</p>
+          <p>We have a skill, <a href="https://github.com/CarsonDavis/claude/tree/master/skills/writing-github-issues">writing-github-issues</a>, that does all of this: takes your brain dump, asks about anything missing, researches the repo to check the work is viable, proposes a split if it&rsquo;s too big, and writes the two-layer draft for you to edit and file.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="claude-md" data-scene data-act="04" data-title="CLAUDE.md" style="--scene-h:300vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">CLAUDE.md &mdash; the ironclad rules.</h2>
+
+      <div class="rule-columns">
+        <div class="rule-col rule-col--good" data-reveal data-from="0.16" data-to="0.28" data-dir="l">
+          <p class="rule-col-title">Good rules</p>
+          <div class="rule-item"><span class="rule-mark accent-teal">&check;</span><span>&ldquo;prefer modular features over one-off scripts&rdquo;</span></div>
+          <div class="rule-item"><span class="rule-mark accent-teal">&check;</span><span>&ldquo;never commit until I&rsquo;ve reviewed the changes&rdquo;</span></div>
+          <div class="rule-item"><span class="rule-mark accent-teal">&check;</span><span>&ldquo;always read vision.md before starting&rdquo;</span></div>
+        </div>
+        <div class="rule-col rule-col--bad" data-reveal data-from="0.28" data-to="0.4" data-dir="r">
+          <p class="rule-col-title">Worse than nothing</p>
+          <div class="rule-item">
+            <span class="rule-mark">&cross;</span>
+            <span>&ldquo;if there are more than five files, put them in a folder&rdquo;<span class="rule-note">over-specific &mdash; worse than nothing</span></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="beat-large" style="margin-top:1.4em" data-reveal data-from="0.68" data-to="0.82">Some problems aren&rsquo;t CLAUDE.md problems. Protect main on GitHub instead.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 20 MIN</span></p>
+        <div class="notes-body">
+          <p>A good harness will carefully follow a CLAUDE.md, so you should use it deliberately. Because a guardrailed agent will often follow instructions to the letter, an over-specific rule can be worse than nothing at all. Don&rsquo;t be draconian: &ldquo;if there are more than five files, put them in a folder&rdquo; is a bad rule.</p>
+          <p>Good rules come in a few shapes: <strong>directional principles</strong>, like &ldquo;prefer modular features over one-off scripts&rdquo;; <strong>clear don&rsquo;ts</strong>, like &ldquo;never commit until after I&rsquo;ve reviewed the changes&rdquo;; and <strong>clear do&rsquo;s</strong>, like &ldquo;always read <code>vision.md</code> before starting a task&rdquo; or &ldquo;always update the documentation before making a commit&rdquo;.</p>
+          <p>And remember, some problems aren&rsquo;t CLAUDE.md problems at all. You could certainly write &ldquo;Don&rsquo;t push to main&rdquo; in your CLAUDE.md. Or you could go on GitHub and make main reachable only through a reviewed PR. You&rsquo;re still a software engineer; don&rsquo;t try to fix organizational problems inside a coding session.</p>
+          <p>This guide doesn&rsquo;t yet cover hooks, but they are another tool you can use alongside your CLAUDE.md to ensure desired behavior.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT V — THE LOOP IN MOTION  (≈10 min)
+     ===================================================================== -->
+<section id="workflow" data-scene data-act="05" data-title="The Workflow" data-anim="pipeline" data-pipe-a="0.08" data-pipe-b="0.72" style="--scene-h:340vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.04">ACT V <span class="act-name">— THE LOOP IN MOTION</span></p>
+
+      <ol class="pipeline">
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">1</span>
+          <p>Reads the vision</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">2</span>
+          <p>Reads the docs</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">3</span>
+          <p>Reads the task</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">4</span>
+          <p>Writes the spec</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">5</span>
+          <p>Implementation agent builds</p>
+        </li>
+        <li class="pipeline-step" data-step>
+          <span class="pipeline-step-dot">6</span>
+          <p>Review agent checks</p>
+        </li>
+      </ol>
+
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.84" data-to="0.96">By the time you code, the thinking should be done.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 10 MIN</span></p>
+        <div class="notes-body">
+          <p>From START-HERE §3: the agent reads the <code>vision.md</code>; then it reads the repo docs the team crafted; then it reads the task the team carefully wrote; the harness writes a detailed specification from its own fresh exploration of the code; an implementation agent builds to that spec; a review agent checks the implementation against the spec, looks for other problems, and reports back when the code is ready to show you.</p>
+          <p>From workflow.md, &ldquo;By the time you code, the thinking should be done&rdquo;: if you have a good issue, the hard decisions should already be made. The project&rsquo;s goals, what this task is for, how it fits the bigger picture, the rough shape of the implementation &mdash; all of that was settled with your team when you wrote the GitHub issue. If you find yourself deeply uncertain about what to build once coding starts, that probably means the planning wasn&rsquo;t finished: either go back to the issue phase, or, if the work is genuinely exploratory, handle it as an exploratory task.</p>
+          <p>&ldquo;What should happen, and who makes it happen&rdquo;: the core loop is small, but there&rsquo;s more than one way to make it happen. <strong>Prompt it yourself, step by step</strong> &mdash; fine for small tasks, but you&rsquo;re holding the structure in your head. <strong>Let the harness drive it</strong> &mdash; a plugin like superpowers runs the whole spec, implement, and review loop for you. <strong>Write a skill that constrains it</strong>, when you want the loop to run the same way every time &mdash; our MMGIS <a href="https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/orchestrating-issues">orchestrating-issues</a> skill is one example, taking an issue all the way to a draft PR and stopping only at the gates that actually need a human. One fair warning: orchestration skills tend to be mildly specific to one repo, because they encode how <em>you</em> deploy, <em>your</em> conventions, and <em>your</em> gotchas &mdash; use someone else&rsquo;s as a starting point, not a drop-in.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="your-turn" data-scene data-act="05" data-title="Your Turn" style="--scene-h:300vh">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">Then it&rsquo;s your turn.</h2>
+      <ul class="checklist" data-reveal data-from="0.16" data-to="0.28">
+        <li>Smoke-test it</li>
+        <li>Read the code</li>
+        <li>Understand the code</li>
+        <li>Iterate, then deliver</li>
+      </ul>
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.7" data-to="0.84">The agent passing its own tests does not mean the code is good. You have to look.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 10 MIN</span></p>
+        <div class="notes-body">
+          <p>From workflow.md, &ldquo;You still own the result&rdquo;: agents are great, and they will write the spec, write the code, and run their own review. But none of that is your seal of approval. When it hands you a finished product, it is still your job to run it locally, confirm it actually does what it should, and read the code yourself. The agent passing its own tests does not mean the code is good. You have to look.</p>
+          <p>&ldquo;Learning code you didn&rsquo;t write&rdquo;: as agents get more capable, they will write code in areas you are not deeply familiar with. That does not excuse you from understanding it. Be willing to Google things, read the real documentation, and ask the agent to explain how its own code works. One tool we&rsquo;ve found effective is the <a href="https://github.com/CarsonDavis/diff-explainer">diff-explainer</a>. It is not a review agent &mdash; it walks you through what a diff does, what it affects, and how it fits into the rest of the codebase, side by side with the actual code, so you can get to a genuine understanding and then make your own call.</p>
+          <p>From START-HERE&rsquo;s own &ldquo;your turn&rdquo; list: smoke-test that the features work, check that you like them; read the code and confirm it&rsquo;s written the way you wanted; understand the code &mdash; not optional; iterate and deliver, until you&rsquo;re happy, then hand it to the team for final review.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="parallel" data-scene data-act="05" data-title="Run in Parallel" data-anim="pipeline" data-pipe-a="0.16" data-pipe-b="0.7" style="--scene-h:280vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">Run several at once.</h2>
+
+      <div class="lane-row">
+        <div class="lane" data-step>
+          <p class="lane-title">worktree 1</p>
+          <p class="lane-attrs">own port &middot; own db &middot; own config</p>
+          <div class="lane-strip"><span>spec</span><span>build</span><span>review</span></div>
+        </div>
+        <div class="lane" data-step>
+          <p class="lane-title">worktree 2</p>
+          <p class="lane-attrs">own port &middot; own db &middot; own config</p>
+          <div class="lane-strip"><span>spec</span><span>build</span><span>review</span></div>
+        </div>
+        <div class="lane" data-step>
+          <p class="lane-title">worktree 3</p>
+          <p class="lane-attrs">own port &middot; own db &middot; own config</p>
+          <div class="lane-strip"><span>spec</span><span>build</span><span>review</span></div>
+        </div>
+      </div>
+
+      <p class="beat" style="margin-top:1.4em" data-reveal data-from="0.8" data-to="0.92">Small issues, in parallel &mdash; instead of one giant PR.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 10 MIN</span></p>
+        <div class="notes-body">
+          <p>From workflow.md, &ldquo;Parallel agents&rdquo;: if your repo is gnarly, it&rsquo;s often worth spending a little time up front refactoring it so you can run several instances side by side on your own machine. That is what unlocks working several issues in parallel without them colliding. Our MMGIS <a href="https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/mmgis-deployment">mmgis-deployment</a> skill is one example of how this was done: each instance gets its own port, database, and config, so many of them coexist cleanly on one machine between different git worktrees. This is especially useful for keeping issues &mdash; and therefore PRs &mdash; small.</p>
+          <p>&ldquo;Exploratory tasks&rdquo;: sometimes you genuinely don&rsquo;t know how a task should be done, and finding out is the task. The workflow still applies &mdash; you just specify a different thing up front. Instead of the implementation, you specify the parameters: how you&rsquo;ll judge the result, what you want to explore, and the pathways worth trying. With that clear, it&rsquo;s easy to spawn several agents in parallel down different paths, gather their reports, and compare them against your baseline. Think of your coding harness as a team of dedicated researchers: propose what sources it should use, have it create cited research documents, cross-reference two agents against each other, have them build a results dashboard for you to review.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT VI — THE FLYWHEEL  (≈7 min)
+     ===================================================================== -->
+<section id="review" data-scene data-act="06" data-title="The Review Loop" style="--scene-h:320vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.04">ACT VI <span class="act-name">— THE FLYWHEEL</span></p>
+      <p class="beat" data-reveal data-from="0.04" data-to="0.14">Review happens twice before a human ever sees it.</p>
+      <p class="beat" data-reveal data-from="0.16" data-to="0.26">No single context window holds the vision, the docs, the issue, the diff, and the tests.</p>
+
+      <div class="card-grid card-grid--six" data-reveal data-from="0.32" data-to="0.34">
+        <div class="card" data-reveal data-from="0.34" data-to="0.42" data-dir="u"><p class="card-title" style="font-size:17px">Project alignment</p></div>
+        <div class="card" data-reveal data-from="0.38" data-to="0.46" data-dir="u"><p class="card-title" style="font-size:17px">Security &amp; architecture</p></div>
+        <div class="card" data-reveal data-from="0.42" data-to="0.5" data-dir="u"><p class="card-title" style="font-size:17px">Craftsmanship</p></div>
+        <div class="card" data-reveal data-from="0.46" data-to="0.54" data-dir="u"><p class="card-title" style="font-size:17px">Test quality</p></div>
+        <div class="card" data-reveal data-from="0.5" data-to="0.58" data-dir="u"><p class="card-title" style="font-size:17px">Doc freshness</p></div>
+        <div class="card" data-reveal data-from="0.54" data-to="0.62" data-dir="u"><p class="card-title" style="font-size:17px">Open-ended</p></div>
+      </div>
+
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.76" data-to="0.9">Seed it from your PR history &mdash; then own what goes in.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 7 MIN</span></p>
+        <div class="notes-body">
+          <p>From review-loop.md, &ldquo;Two places review happens&rdquo;: inside the agent framework, before anything reaches a PR &mdash; the harness&rsquo;s own review agent checks the implementation against the spec and catches problems early, in the same session that wrote the code; and as a custom review on the project, run on the diff before human review, something you can improve over time.</p>
+          <p>&ldquo;Custom review pipelines&rdquo;: it probably shouldn&rsquo;t be a single agent, because no single context window usefully holds the vision, the docs, the issue, the diff, and the tests all at once. Cram it all into one agent and every check gets worse. So it&rsquo;s a pipeline of narrow agents: <strong>project alignment</strong> reads the vision and the docs and flags code that&rsquo;s technically fine but pulls against the project&rsquo;s direction. <strong>Security and architecture</strong> enforces rules that should hold across your projects, like deployments using OIDC instead of long-lived keys, or S3 buckets never being open to the internet. <strong>Craftsmanship</strong> is the ordinary good-reviewer pass &mdash; maintainable, well-architected, no unrequested bloat. <strong>Test quality</strong> reads the issue to learn what behavior was actually intended, then checks whether the tests genuinely exercise it; integration tests you understand are worth far more here than a thousand LLM-written unit tests. <strong>Documentation freshness</strong> confirms the change carried its docs with it. <strong>Open-ended</strong> gets a free pass to catch whatever the dedicated agents missed. Not every agent fits every repo &mdash; start with what a given project needs.</p>
+          <p>&ldquo;Seed it from your PR history&rdquo;: we have a tool, <a href="https://github.com/CarsonDavis/claude/tree/master/skills/learn-from-pr-reviews">learn-from-pr-reviews</a>, that spawns agents to read through every review comment ever left on a repo across its whole history, verifies each one against the actual code &mdash; a comment existing doesn&rsquo;t mean it mattered, and a comment being made doesn&rsquo;t mean it was acted on &mdash; and synthesizes a report of candidate review guidelines. Treat its results only as a starting point: you are responsible for what goes into the agent, so read it carefully, delete what&rsquo;s wrong, add what you want, and grow it into a custom review.md skill you distribute to the team.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="improvement" data-scene data-act="06" data-title="Continuous Improvement" style="--scene-h:300vh">
+  <div class="scene-stage">
+    <div class="scene-inner scene-inner--wide">
+      <h2 class="headline-sm" data-reveal data-from="0" data-to="0.1">Every failure tells you which artifact to fix.</h2>
+
+      <div class="mapping-rows">
+        <div class="mapping-row" data-reveal data-from="0.2" data-to="0.3">
+          <span class="mapping-fail">misaligned decisions</span>
+          <span class="mapping-arrow">&rarr;</span>
+          <span class="mapping-fix">the vision</span>
+        </div>
+        <div class="mapping-row" data-reveal data-from="0.3" data-to="0.4">
+          <span class="mapping-fail">context-blind mistake</span>
+          <span class="mapping-arrow">&rarr;</span>
+          <span class="mapping-fix">the codebase docs</span>
+        </div>
+        <div class="mapping-row" data-reveal data-from="0.4" data-to="0.5">
+          <span class="mapping-fail">code your reviewer wouldn&rsquo;t accept</span>
+          <span class="mapping-arrow">&rarr;</span>
+          <span class="mapping-fix">the review</span>
+        </div>
+        <div class="mapping-row" data-reveal data-from="0.5" data-to="0.6">
+          <span class="mapping-fail">oversized, sprawling PR</span>
+          <span class="mapping-arrow">&rarr;</span>
+          <span class="mapping-fix">the issue</span>
+        </div>
+      </div>
+
+      <p class="beat-large" style="margin-top:1.2em" data-reveal data-from="0.76" data-to="0.9">Do this and your harness gets better every cycle.</p>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 7 MIN</span></p>
+        <div class="notes-body">
+          <p>From START-HERE, &ldquo;Continuous improvement&rdquo;, in full: none of these documents are write-once and forget, and your agentic coding system will never be perfect. On a regular cadence, you need to look at where the LLM failed you and write the lessons back into the artifact that should have caught it: making misaligned implementation decisions &mdash; improve the vision; making a context-blind mistake in the code &mdash; improve the codebase docs; shipping code your reviewer wouldn&rsquo;t accept &mdash; improve the review; producing an oversized, sprawling PR &mdash; improve the issue.</p>
+          <p>Do this and your harness will get better every cycle, and your agent will ship better and more aligned code. We have some dedicated tools to help with this, like a skill that mines every review comment ever left on a repo, synthesizes them, and produces a report of candidate review guidelines.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     ACT VII — THE CLOSE  (≈2 min)
+     ===================================================================== -->
+<section id="close" class="scene--auto" data-scene data-act="07" data-title="The Close" data-anim="pipeline" data-pipe-a="0.1" data-pipe-b="0.4">
+  <div class="scene-stage">
+    <div class="scene-inner">
+      <p class="act-opener" data-reveal data-from="0" data-to="0.06">ACT VII <span class="act-name">— THE CLOSE</span></p>
+      <h2 class="headline" data-reveal data-from="0.06" data-to="0.2">If you don&rsquo;t own the spec the agent is about to implement, you don&rsquo;t own anything.</h2>
+      <p class="lede" data-reveal data-from="0.24" data-to="0.36">You can delegate the typing. You can&rsquo;t delegate the owning.</p>
+
+      <div class="outro-card" data-reveal data-from="0.42" data-to="0.56">
+        <p class="eyebrow" style="margin-bottom:0.8em">Take the link, not just the slides</p>
+        <div class="outro-links">
+          <a href="https://madebycarson.com/working-with-llms/">&rarr; The full guide &mdash; madebycarson.com/working-with-llms</a>
+          <a href="https://github.com/CarsonDavis/claude">&rarr; The tools &mdash; github.com/CarsonDavis/claude</a>
+        </div>
+        <p class="outro-signoff">Working With LLMs &middot; a workshop &middot; built with Eleventy</p>
+      </div>
+
+      <aside class="notes">
+        <p class="notes-label">Notes <span class="notes-pace">&asymp; 2 MIN</span></p>
+        <div class="notes-body">
+          <p>This closing line is a refrain that runs through the whole guide. From START-HERE §2.3: &ldquo;you can use agents to help you write, but you must read what the agent wrote. If you don&rsquo;t take ownership of the spec the agent is about to implement, then you don&rsquo;t own anything.&rdquo;</p>
+          <p>Writing-an-issue&rsquo;s payoff section puts it just as plainly: &ldquo;this beautiful process only works if you actually read what the agent drafted&hellip;if you don&rsquo;t own the spec it&rsquo;s about to implement, you don&rsquo;t own anything.&rdquo; And codebase-docs closes the same way about documentation: &ldquo;you have to read them and own them&hellip;anything you give the agent, it will take at face value as truth.&rdquo;</p>
+          <p>You can delegate the typing. You can&rsquo;t delegate the owning. Point the room at the full guide for the detail this workshop compressed &mdash; <code>madebycarson.com/working-with-llms</code> &mdash; and at the tools it names, which live in the <code>claude</code> repo on GitHub.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

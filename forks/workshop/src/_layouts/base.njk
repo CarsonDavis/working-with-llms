@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ pageTitle or title }}</title>
+<meta name="description" content="{{ dek or 'Working with LLMs: a live workshop walkthrough of the guide to doing software development with coding agents.' }}">
+{# Preview deployment — remove if this fork is ever promoted to the real site. #}
+<meta name="robots" content="noindex">
+<link rel="preload" href="/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/workshop.css">
+<script>
+// Engine only activates when JS is on AND the reader hasn't asked for
+// reduced motion. This must run before first paint so there is no flash
+// of scene-animated (invisible) content that then has to snap visible.
+(function () {
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) document.documentElement.classList.add("anim");
+})();
+</script>
+</head>
+<body>
+<div data-progressbar></div>
+<div data-caption></div>
+<div class="hint" data-hint><span class="mono">&rarr; next &middot; N notes &middot; ? keys</span></div>
+
+<div class="help-overlay" data-help aria-hidden="true">
+  <div class="help-card" data-help-card>
+    <p class="help-title mono">KEYS</p>
+    <dl class="help-list">
+      <div><dt>&rarr; &darr; space</dt><dd>next scene</dd></div>
+      <div><dt>&larr; &uarr;</dt><dd>previous scene</dd></div>
+      <div><dt>home / end</dt><dd>first / last scene</dd></div>
+      <div><dt>N</dt><dd>toggle speaker notes</dd></div>
+      <div><dt>?</dt><dd>toggle this overlay</dd></div>
+      <div><dt>esc</dt><dd>close overlay</dd></div>
+    </dl>
+    <p class="help-dismiss mono">? &middot; esc &middot; click to dismiss</p>
+  </div>
+</div>
+
+{{ content | safe }}
+<script defer src="/js/engine.js"></script>
+</body>
+</html>

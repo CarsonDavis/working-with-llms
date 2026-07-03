@@ -38,6 +38,14 @@ npm install                       # first time only
 npm run dev                       # → http://localhost:8090
 ```
 
+**Workshop** — port 8095:
+
+```bash
+cd forks/workshop
+npm install                       # first time only
+npm run dev                       # → http://localhost:8095
+```
+
 ## What each fork does differently
 
 **[field-manual](field-manual/)** — the guide as a beautifully typeset book. Warm paper,
@@ -62,6 +70,14 @@ diagram while §2's subsections scroll past it, animates the six-step workflow a
 sequential pipeline, and reveals the improvement table row by row. The seven child
 chapters become six flowing "deep dive" pages linked from the essay. Degrades to a
 plain linear essay with JavaScript off or reduced motion.
+
+**[workshop](workshop/)** — the guide restaged as the visual aid for a live 30–60
+minute talk, in the scrolly style but presenter-first: seven acts, sixteen scenes,
+big-type headlines and diagrams with at most ~40 words on screen per beat — you say
+the rest. Arrow keys / space jump between scenes, `N` toggles speaker notes (the full
+guide prose per scene, with per-act pacing hints), `?` shows the keys. With JavaScript
+off it becomes a linear handout with all notes visible. Every guide section is mapped
+to a scene in [workshop/COVERAGE.md](workshop/COVERAGE.md).
 
 ## Notes
 

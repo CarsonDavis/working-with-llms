@@ -1,0 +1,858 @@
+/* ==========================================================================
+   Working With LLMs — workshop fork
+   Same dark editorial theme as scrolly-essay, scaled up for a room: this is
+   the visual aid for a live talk, read from the back row, not a page read
+   up close. Headline beats are bigger, cards are bigger, and a presenter
+   chrome layer (keyboard-nav hint, notes panel, help overlay) sits on top.
+   ========================================================================== */
+
+/* ---- Fonts (self-hosted, latin subset only, static weights) ---- */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("../fonts/space-grotesk-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("../fonts/space-grotesk-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("../fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("../fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+}
+
+/* ---- Tokens ---- */
+:root {
+  --bg: #0a0d14;
+  --ink: #eef2fb;
+  --muted: #8b95ab;
+  --blue: #5b9cff;
+  --teal: #36d6c3;
+  --amber: #ffc65c;
+  --border: rgba(255, 255, 255, 0.09);
+  --card-grad: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
+  --serif-display: "Space Grotesk", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---- Reset ---- */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-display);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: var(--blue); text-decoration-color: rgba(91, 156, 255, 0.4); }
+a:hover { text-decoration-color: currentColor; }
+h1, h2, h3 { font-family: var(--serif-display); letter-spacing: -0.025em; margin: 0; font-weight: 700; }
+p { margin: 0 0 0.7em; text-wrap: pretty; }
+strong { color: var(--ink); font-weight: 700; }
+em { font-style: italic; }
+.mono { font-family: var(--mono); }
+
+/* ---- Eyebrow ---- */
+.eyebrow {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 1em;
+}
+
+/* =========================================================================
+   Chrome: progress bar, corner caption, keyboard hint (bottom-right)
+   ========================================================================= */
+[data-progressbar] {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--teal), var(--amber));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: 60;
+  display: none;
+}
+[data-caption] {
+  position: fixed;
+  left: 28px; bottom: 24px;
+  font: 600 13px/1.2 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  z-index: 40;
+  pointer-events: none;
+  display: none;
+}
+html.anim [data-progressbar],
+html.anim [data-caption] {
+  display: block;
+}
+
+.hint {
+  position: fixed;
+  right: 28px; bottom: 24px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: none;
+}
+html.anim .hint { display: block; }
+html.anim .hint:not(.is-hidden) { opacity: 1; }
+@media (max-width: 640px) {
+  .hint { display: none; }
+}
+
+/* ---- Help overlay ("?") ---- */
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 8, 13, 0.82);
+  backdrop-filter: blur(2px);
+}
+.help-overlay.is-open { display: flex; }
+.help-card {
+  width: min(420px, 88vw);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #0f1420;
+  padding: 2em 2.2em;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6);
+}
+.help-title {
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  color: var(--teal);
+  margin: 0 0 1.2em;
+}
+.help-list { margin: 0 0 1.6em; display: flex; flex-direction: column; gap: 0.7em; }
+.help-list > div { display: flex; justify-content: space-between; gap: 1.5em; align-items: baseline; }
+.help-list dt {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--amber);
+  white-space: nowrap;
+}
+.help-list dd { margin: 0; color: var(--ink); font-size: 15px; text-align: right; }
+.help-dismiss { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); margin: 0; text-transform: uppercase; }
+
+/* =========================================================================
+   Scenes: default = normal flowing block, auto height (degraded state)
+   ========================================================================= */
+[data-scene] {
+  position: relative;
+  padding: 8vw 0;
+  border-bottom: 1px solid var(--border);
+}
+[data-scene]:last-child { border-bottom: none; }
+html.anim [data-scene] {
+  height: var(--scene-h, 100vh);
+  padding: 0;
+  border-bottom: none;
+}
+/* The close scene (S16) ends the deck with an auto-height outro card
+   instead of another pinned 100vh stage — content flows normally, the
+   sticky stage un-pins, and the deck simply runs out of scenes. */
+html.anim [data-scene].scene--auto {
+  height: auto;
+}
+html.anim [data-scene].scene--auto .scene-stage {
+  position: static;
+  height: auto;
+  padding: 12vh 6vw 16vh;
+}
+
+.scene-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8vw 6vw;
+  min-height: 60vh;
+}
+html.anim .scene-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 0;
+  padding: 6vw 6vw;
+}
+.scene-stage--hero { min-height: 100vh; }
+
+.scene-inner {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+.scene-inner--left { text-align: left; }
+.scene-inner--wide { max-width: 1080px; }
+
+/* ---- Act-opener: full-bleed mono eyebrow on each act's first scene ---- */
+.act-opener {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: clamp(14px, 2.2vw, 20px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin: 0 0 1.4em;
+}
+.act-opener .act-name { color: var(--muted); }
+
+/* ---- Reveals: default = fully visible, no motion ---- */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+html.anim [data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* =========================================================================
+   Type scale — bigger than scrolly-essay: read from the back of a room.
+   ========================================================================= */
+.headline, h1.headline {
+  font-weight: 700;
+  font-size: clamp(36px, 5.5vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+.headline-sm, h2.headline-sm {
+  font-weight: 700;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+.lede {
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.45;
+  color: var(--ink);
+}
+.dek {
+  font-size: clamp(17px, 1.6vw, 20px);
+  color: var(--muted);
+  line-height: 1.5;
+}
+.beat {
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.4;
+  color: var(--ink);
+}
+.beat-large {
+  font-weight: 700;
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.accent-blue { color: var(--blue); }
+.accent-teal { color: var(--teal); }
+.accent-amber { color: var(--amber); }
+
+.hint-line {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ---- Staggered accent lines (S2) ---- */
+.accent-trio-list {
+  list-style: none;
+  margin: 1.4em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+/* ---- Scene number badge (unused for captioning, kept for act-scoped
+   sub-numbering, e.g. "2.1" style labels) ---- */
+.scene-tag {
+  font: 600 13px/1 var(--mono);
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* =========================================================================
+   Cards
+   ========================================================================= */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-grad);
+  padding: 1.6em 1.8em;
+  text-align: left;
+}
+.card--highlight {
+  border-color: rgba(91, 156, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(91, 156, 255, 0.14), 0 14px 44px -20px rgba(91, 156, 255, 0.32);
+}
+.card-title { font-weight: 700; font-size: clamp(18px, 2vw, 22px); margin-bottom: 0.35em; }
+.card-dek { color: var(--muted); font-size: clamp(14px, 1.3vw, 16px); margin: 0; }
+
+/* Four-card grid: failures (S3), review roster (S14) */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1em;
+  margin-top: 1.6em;
+  width: 100%;
+}
+@media (max-width: 720px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
+.card-grid--six { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) {
+  .card-grid--six { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .card-grid--six { grid-template-columns: 1fr; }
+}
+
+/* Numbered job cards (S4) */
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1.8em;
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+.card-stack .card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1em;
+  align-items: start;
+}
+.card-num {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--amber);
+  letter-spacing: 0.06em;
+  padding-top: 0.15em;
+}
+.card-stack .card-title { font-size: clamp(19px, 2.2vw, 24px); }
+
+/* ---- Mono rule chips (S7) ---- */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 1.8em;
+  justify-content: center;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: clamp(13px, 1.15vw, 15px);
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.55em 1.1em;
+  background: rgba(255, 255, 255, 0.03);
+}
+.chip--flag {
+  color: var(--amber);
+  border-color: rgba(255, 198, 92, 0.4);
+}
+
+/* ---- Mini pipeline (S7 vision 3-step) ---- */
+.mini-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1.8em;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+.mini-pipeline-step {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 1em;
+  padding: 0.7em 0;
+}
+.mini-pipeline-dot {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  color: var(--muted);
+}
+.mini-pipeline-step p { margin: 0; padding-top: 0.4em; font-size: clamp(16px, 1.6vw, 19px); }
+.mini-pipeline-step.is-flag .mini-pipeline-dot { border-color: var(--amber); color: var(--amber); }
+.mini-pipeline-step.is-flag p strong { color: var(--amber); }
+html.anim .mini-pipeline-step { opacity: 0.35; transition: opacity 0.35s ease; }
+html.anim .mini-pipeline-step.is-active,
+html.anim .mini-pipeline-step.is-done { opacity: 1; }
+html.anim .mini-pipeline-step.is-active .mini-pipeline-dot,
+html.anim .mini-pipeline-step.is-done .mini-pipeline-dot {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(91, 156, 255, 0.12);
+}
+
+/* =========================================================================
+   Step pipelines (harness N=4, workflow N=6): driven by data-anim="pipeline"
+   ========================================================================= */
+.pipeline {
+  margin-top: 1.8em;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 760px;
+  text-align: left;
+}
+.pipeline--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8em;
+  max-width: 980px;
+}
+.pipeline-step {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 1.1em;
+  padding: 0.9em 0;
+  align-items: center;
+}
+.pipeline--row .pipeline-step {
+  grid-template-columns: 40px auto;
+  padding: 0.6em 1em;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-grad);
+}
+html.anim .pipeline-step {
+  opacity: 0.32;
+  transition: opacity 0.35s ease;
+}
+html.anim .pipeline-step.is-active,
+html.anim .pipeline-step.is-done { opacity: 1; }
+.pipeline-step-dot {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 14px; font-weight: 600;
+  color: var(--muted);
+  transition: border-color 0.35s ease, color 0.35s ease, background 0.35s ease;
+}
+.pipeline-step.is-active .pipeline-step-dot,
+.pipeline-step.is-done .pipeline-step-dot {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(91, 156, 255, 0.12);
+}
+.pipeline-step p { margin: 0; font-size: clamp(17px, 1.8vw, 22px); }
+
+/* =========================================================================
+   Context stack (S6): compact pinned diagram, N=4 layers
+   ========================================================================= */
+.stack-diagram {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-grad);
+  padding: 2em 2.2em;
+  width: 100%;
+  max-width: 520px;
+  margin: 1.8em auto 0;
+  text-align: left;
+}
+.stack-diagram-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 1.1em;
+  text-align: center;
+}
+.stack-layer {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9em 1.2em;
+  margin-bottom: 0.7em;
+  transition: border-color 0.35s ease, background 0.35s ease, opacity 0.35s ease;
+  opacity: 0.5;
+}
+html.anim .stack-layer { opacity: 0.5; }
+html.anim .stack-layer.is-active,
+html.anim .stack-layer.is-done { opacity: 1; }
+.stack-layer.is-active {
+  border-color: var(--teal);
+  background: rgba(54, 214, 195, 0.1);
+}
+.stack-layer-name { font-family: var(--mono); font-weight: 600; font-size: 16px; color: var(--ink); }
+.stack-layer-what { font-size: 13px; color: var(--muted); margin-top: 0.15em; }
+.stack-arrow { text-align: center; color: var(--muted); font-family: var(--mono); margin: 0.5em 0; font-size: 20px; }
+.stack-context-box {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1em 1.2em;
+  margin-top: 0.5em;
+  font-family: var(--mono);
+  font-size: 15px;
+  text-align: center;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================================================================
+   Scale table rows (S8 visual 1)
+   ========================================================================= */
+.scale-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  margin-top: 1.8em;
+  width: 100%;
+  max-width: 720px;
+  text-align: left;
+}
+.scale-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1.3fr;
+  gap: 1em;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1em 1.3em;
+  background: var(--card-grad);
+  font-size: clamp(15px, 1.5vw, 18px);
+}
+.scale-row-arrow { color: var(--muted); font-family: var(--mono); text-align: center; }
+.scale-row-repo { color: var(--muted); }
+.scale-row-doc { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) {
+  .scale-row { grid-template-columns: 1fr; text-align: left; }
+  .scale-row-arrow { display: none; }
+}
+html.anim .scale-row { opacity: 0.4; transition: opacity 0.35s ease, border-color 0.35s ease; }
+html.anim .scale-row.is-active,
+html.anim .scale-row.is-done { opacity: 1; border-color: rgba(54, 214, 195, 0.4); }
+
+/* =========================================================================
+   Two-layer issue document diagram (S9)
+   ========================================================================= */
+.doc-diagram {
+  width: 100%;
+  max-width: 640px;
+  margin: 1.8em auto 0;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  text-align: left;
+}
+.doc-layer { padding: 1.6em 1.8em; }
+.doc-layer-human {
+  background: rgba(91, 156, 255, 0.07);
+  border-bottom: 1px dashed var(--border);
+}
+.doc-layer-agent { background: rgba(255, 255, 255, 0.02); }
+.doc-layer-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+.doc-layer-human .doc-layer-label { color: var(--blue); }
+.doc-layer-agent .doc-layer-label { color: var(--muted); }
+.doc-layer-body { font-size: clamp(15px, 1.5vw, 18px); color: var(--ink); }
+.doc-layer-agent .doc-layer-body { color: var(--muted); font-family: var(--mono); font-size: 14px; }
+
+/* ---- Flow steps (S9 beat 2) ---- */
+.flow-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.4em;
+}
+.flow-row .chip { color: var(--ink); }
+.flow-sep { color: var(--muted); font-family: var(--mono); }
+
+/* =========================================================================
+   Two-column good/bad rules (S10)
+   ========================================================================= */
+.rule-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6em;
+  margin-top: 1.8em;
+  width: 100%;
+  max-width: 900px;
+  text-align: left;
+}
+@media (max-width: 720px) {
+  .rule-columns { grid-template-columns: 1fr; }
+}
+.rule-col-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.9em;
+}
+.rule-col--good .rule-col-title { color: var(--teal); }
+.rule-col--bad .rule-col-title { color: var(--muted); }
+.rule-item {
+  display: flex;
+  gap: 0.7em;
+  align-items: flex-start;
+  padding: 0.7em 0;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: clamp(14px, 1.4vw, 16.5px);
+}
+.rule-item:first-of-type { border-top: none; }
+.rule-mark { flex: none; font-weight: 700; }
+.rule-col--good .rule-mark { color: var(--teal); }
+.rule-col--bad .rule-mark { color: var(--muted); }
+.rule-col--bad .rule-item { opacity: 0.75; }
+.rule-note { display: block; font-family: var(--serif-display); color: var(--muted); font-size: 13px; margin-top: 0.3em; font-style: italic; }
+
+/* =========================================================================
+   Checklist (S12)
+   ========================================================================= */
+.checklist {
+  list-style: none;
+  margin: 1.8em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+.checklist li {
+  padding-left: 2em;
+  position: relative;
+  font-size: clamp(17px, 1.8vw, 21px);
+}
+.checklist li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.5em;
+  width: 10px; height: 10px;
+  border-radius: 3px;
+  background: var(--teal);
+}
+
+/* =========================================================================
+   Parallel lanes (S13)
+   ========================================================================= */
+.lane-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2em;
+  margin-top: 1.8em;
+  width: 100%;
+}
+@media (max-width: 780px) {
+  .lane-row { grid-template-columns: 1fr; }
+}
+.lane {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-grad);
+  padding: 1.3em 1.4em;
+  text-align: left;
+  transition: border-color 0.35s ease, opacity 0.35s ease;
+  opacity: 0.4;
+}
+html.anim .lane.is-active,
+html.anim .lane.is-done { opacity: 1; border-color: rgba(91, 156, 255, 0.4); }
+.lane-title { font-family: var(--mono); font-weight: 600; font-size: 15px; margin-bottom: 0.6em; }
+.lane-attrs { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-bottom: 0.9em; }
+.lane-strip { display: flex; gap: 0.4em; }
+.lane-strip span {
+  flex: 1;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4em 0.2em;
+}
+.lane.is-active .lane-strip span:first-child,
+.lane.is-done .lane-strip span { border-color: rgba(91, 156, 255, 0.35); color: var(--ink); }
+
+/* =========================================================================
+   Improvement mapping rows (S15)
+   ========================================================================= */
+.mapping-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  margin-top: 1.8em;
+  width: 100%;
+  max-width: 820px;
+  text-align: left;
+}
+.mapping-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1em;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1em 1.4em;
+  background: var(--card-grad);
+  font-size: clamp(15px, 1.5vw, 18px);
+}
+.mapping-fail { color: var(--muted); }
+.mapping-arrow { color: var(--muted); font-family: var(--mono); text-align: center; }
+.mapping-fix { color: var(--amber); font-weight: 700; }
+@media (max-width: 640px) {
+  .mapping-row { grid-template-columns: 1fr; text-align: left; }
+  .mapping-arrow { display: none; }
+}
+
+/* =========================================================================
+   Outro / close (S16) — auto-height, not a pinned stage
+   ========================================================================= */
+.outro-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-grad);
+  padding: 2em 2.2em;
+  margin-top: 2.2em;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+.outro-links { display: flex; flex-direction: column; gap: 0.6em; margin-bottom: 1.2em; }
+.outro-links a { font-family: var(--mono); font-size: 15px; }
+.outro-signoff {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+  padding-top: 1em;
+  border-top: 1px solid var(--border);
+}
+
+/* =========================================================================
+   Speaker notes panel
+   ========================================================================= */
+.notes {
+  display: none;
+  width: 100%;
+  max-width: 720px;
+  margin: 2em auto 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 1.4em 1.6em;
+  text-align: left;
+}
+/* Degraded document (no JS-driven anim class): always show notes inline,
+   right below each scene's on-screen copy, per the spec's "handout" mode. */
+html:not(.anim) .notes { display: block; }
+/* Presenter mode: notes hidden by default under .anim, shown when "N" is
+   pressed (html.notes-on — deliberately NOT "html.notes": the aside
+   elements below are themselves class="notes", and a same-named class on
+   <html> would also satisfy the plain `.notes` selector above via
+   `documentElement.matches('.notes')`, setting display:none on <html>
+   itself and collapsing the whole page). The pinned stage is a fixed
+   100vh box, so once notes are showing, let the stage scroll internally
+   instead of clipping or pushing the sticky layout around. */
+html.anim.notes-on .notes { display: block; max-height: 42vh; overflow-y: auto; }
+html.anim.notes-on .scene-stage { overflow-y: auto; }
+html.anim.notes-on .scene-stage--hero { align-items: center; }
+
+.notes-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+.notes-pace { color: var(--muted); letter-spacing: 0.1em; }
+.notes-body {
+  margin-top: 0.9em;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.notes-body p { margin: 0 0 0.85em; }
+.notes-body p:last-child { margin-bottom: 0; }
+.notes-body strong { color: var(--ink); }
+.notes-body code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .scene-stage, html.anim .scene-stage { padding: 8vw 6vw; }
+  [data-caption] { left: 16px; bottom: 16px; font-size: 10.5px; }
+  .card-grid { gap: 0.8em; }
+}
