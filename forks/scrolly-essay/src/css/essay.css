@@ -1,0 +1,530 @@
+/* ==========================================================================
+   Working With LLMs — scrolly essay
+   Dark editorial theme, adapted from the ajinkya.ai case study.
+   ========================================================================== */
+
+/* ---- Fonts (self-hosted, latin subset only) ---- */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+}
+
+/* ---- Tokens ---- */
+:root {
+  --bg: #0a0d14;
+  --ink: #eef2fb;
+  --muted: #8b95ab;
+  --blue: #5b9cff;
+  --teal: #36d6c3;
+  --amber: #ffc65c;
+  --border: rgba(255, 255, 255, 0.09);
+  --card-grad: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
+  --serif-display: "Space Grotesk", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---- Reset ---- */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-display);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: var(--blue); text-decoration-color: rgba(91, 156, 255, 0.4); }
+a:hover { text-decoration-color: currentColor; }
+h1, h2, h3 { font-family: var(--serif-display); letter-spacing: -0.025em; margin: 0; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+pre {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: #0f1420;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+hr.hairline { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+/* ---- Eyebrow / mono chrome ---- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 1em;
+}
+.mono { font-family: var(--mono); }
+
+/* ---- Chrome: progress bar + corner caption (essay only, .anim only) ---- */
+[data-progressbar] {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--teal), var(--amber));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: 50;
+  display: none;
+}
+[data-caption] {
+  position: fixed;
+  left: 26px; bottom: 22px;
+  font: 600 13px/1.2 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  z-index: 40;
+  pointer-events: none;
+  display: none;
+}
+html.anim [data-progressbar],
+html.anim [data-caption] {
+  display: block;
+}
+
+/* ---- Scenes: default = normal flowing block, auto height ---- */
+[data-scene] {
+  position: relative;
+  padding: 6vw 0;
+}
+html.anim [data-scene] {
+  height: var(--scene-h, 100vh);
+  padding: 0;
+}
+/* The context-stack scene carries much longer prose than the others and
+   uses a sticky sidebar instead of a pinned full-viewport stage, so it
+   opts out of the forced vh height and sizes to its own content. */
+html.anim [data-scene].scene--auto {
+  height: auto;
+}
+.scene-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8vw 6vw;
+  min-height: 60vh;
+}
+html.anim .scene-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 0;
+  padding: 5vw 6vw;
+}
+.scene-stage--hero { min-height: 100vh; }
+
+.scene-inner {
+  width: 100%;
+  max-width: 54ch;
+  margin: 0 auto;
+}
+.scene-inner--wide { max-width: 920px; }
+
+.scene-num {
+  font: 600 13px/1 var(--mono);
+  color: var(--teal);
+  letter-spacing: 0.1em;
+}
+
+/* ---- Reveals: default = fully visible, no motion ---- */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+html.anim [data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* ---- Type scale ---- */
+h1.headline, .headline {
+  font-weight: 600;
+  font-size: clamp(28px, 4.4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+h2.headline-sm, .headline-sm {
+  font-weight: 600;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.dek {
+  font-size: clamp(16px, 1.6vw, 19px);
+  color: var(--muted);
+  line-height: 1.5;
+}
+.lede {
+  font-size: clamp(19px, 2vw, 23px);
+  line-height: 1.5;
+}
+.aside {
+  color: var(--muted);
+  font-size: 0.95em;
+}
+.accent-blue { color: var(--blue); }
+.accent-teal { color: var(--teal); }
+.accent-amber { color: var(--amber); }
+strong { color: var(--ink); font-weight: 600; }
+
+.accent-trio {
+  list-style: none;
+  margin: 1.2em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.accent-trio li {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+.accent-trio li::before { content: "— "; color: var(--muted); }
+
+/* ---- Hint ---- */
+.hint {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ---- Cards ---- */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-grad);
+  padding: 1.4em 1.5em;
+}
+.card--highlight {
+  border-color: rgba(91, 156, 255, 0.4);
+  box-shadow: 0 0 0 1px rgba(91, 156, 255, 0.12), 0 12px 40px -20px rgba(91, 156, 255, 0.3);
+}
+
+/* Numbered responsibility / step cards */
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  margin-top: 1.4em;
+  list-style: none;
+  padding: 0;
+}
+.card-stack .card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9em;
+  align-items: start;
+}
+.card-num {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  padding-top: 0.2em;
+}
+
+/* Go-deeper cards */
+.go-deeper {
+  display: block;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-grad);
+  padding: 1.2em 1.4em;
+  margin-top: 1.6em;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.go-deeper:hover { border-color: rgba(54, 214, 195, 0.45); transform: translateY(-1px); }
+.go-deeper .eyebrow { color: var(--teal); margin-bottom: 0.5em; font-size: 12px; }
+.go-deeper-title { font-weight: 600; font-size: 1.05em; margin-bottom: 0.3em; }
+.go-deeper-dek { color: var(--muted); font-size: 0.92em; margin: 0; }
+.go-deeper-arrow { float: right; color: var(--teal); font-family: var(--mono); }
+
+/* ---- Checklist ---- */
+.checklist { list-style: none; margin: 1.2em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.7em; }
+.checklist li { padding-left: 1.6em; position: relative; }
+.checklist li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.45em;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  background: var(--teal);
+}
+
+/* ---- Designed table ---- */
+.table-designed {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.4em;
+  font-size: 0.95em;
+}
+.table-designed th, .table-designed td {
+  text-align: left;
+  padding: 0.8em 1em;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.table-designed th {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+/* transform on <tr> is unreliable across browsers; drive that reveal with
+   opacity alone (engine.js still writes a transform, this just ignores it). */
+html.anim .table-designed tr[data-reveal] { transform: none !important; }
+.table-designed .artifact { color: var(--amber); font-weight: 600; }
+
+/* ---- Step pipeline (workflow scene) ---- */
+.pipeline { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0; }
+.pipeline-step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 1em;
+  padding: 0.9em 0;
+}
+/* Dimming/lighting is purely an .anim affordance — without it every step
+   reads at full opacity, a normal list. */
+html.anim .pipeline-step {
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+html.anim .pipeline-step.is-active, html.anim .pipeline-step.is-done { opacity: 1; }
+.pipeline-step-dot {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  color: var(--muted);
+  transition: border-color 0.35s ease, color 0.35s ease, background 0.35s ease;
+}
+.pipeline-step.is-active .pipeline-step-dot,
+.pipeline-step.is-done .pipeline-step-dot {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(91, 156, 255, 0.1);
+}
+.pipeline-step-rule {
+  width: 1px;
+  background: var(--border);
+  justify-self: center;
+  grid-column: 1;
+}
+.pipeline-step p { margin: 0; padding-top: 0.35em; }
+
+/* ---- Context stack: sticky sidebar (diagram) + normally-flowing prose
+   (steps). This scene carries the FULL text of four subsections, so unlike
+   the other scenes it is not a single pinned 100vh box — the diagram pins
+   via plain CSS `position:sticky` inside a two-column grid while the prose
+   column scrolls at its natural (content-determined) height. See
+   `.scene--auto` above, which opts this scene's <section> out of the
+   generic forced `height: var(--scene-h)` rule. ---- */
+.context-intro { max-width: 54ch; margin: 0 auto; padding: 10vh 6vw 6vh; }
+.context-scene-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 6vw 12vh;
+  width: 100%;
+}
+html.anim .context-scene-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) 1fr;
+  gap: 4vw;
+  align-items: start;
+}
+
+.stack-diagram-wrap { margin-bottom: 4vh; }
+html.anim .stack-diagram-wrap { position: sticky; top: 14vh; margin-bottom: 0; }
+
+.stack-diagram {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-grad);
+  padding: 1.6em;
+}
+.stack-diagram-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 1em; }
+.stack-layer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75em 1em;
+  margin-bottom: 0.6em;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+/* Dimming is an .anim affordance only — without it every layer is legible
+   at full opacity. */
+html.anim .stack-layer {
+  transition: border-color 0.35s ease, color 0.35s ease, opacity 0.35s ease, background 0.35s ease;
+  opacity: 0.5;
+}
+html.anim .stack-layer.is-active {
+  border-color: var(--teal);
+  color: var(--ink);
+  background: rgba(54, 214, 195, 0.08);
+  opacity: 1;
+}
+.stack-arrow {
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--mono);
+  margin: 0.4em 0;
+}
+.stack-context-box {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9em 1em;
+  margin-top: 0.4em;
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: center;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.context-steps { display: flex; flex-direction: column; gap: 6vh; }
+.context-step { padding-bottom: 2vh; }
+.context-step-num { font-family: var(--mono); font-size: 12px; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 0.4em; }
+
+/* On narrow screens: diagram sits above steps, unpinned, single column
+   even under .anim — same visual outcome as the degraded state, reached
+   here via a breakpoint instead of the anim class. */
+@media (max-width: 780px) {
+  html.anim .context-scene-grid { display: block; }
+  html.anim .stack-diagram-wrap { position: static; top: auto; margin-bottom: 4vh; }
+}
+
+/* ---- Colophon / outro ---- */
+.outro {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 10vh 6vw 14vh;
+}
+.go-deeper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1em;
+  margin: 2em 0 3em;
+}
+.go-deeper-grid .go-deeper { margin-top: 0; }
+.colophon { max-width: 54ch; color: var(--muted); }
+.footer-line {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Deep-dive pages ---- */
+.deep-page {
+  max-width: 62ch;
+  margin: 0 auto;
+  padding: 10vh 6vw 12vh;
+}
+.back-link {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 2em;
+}
+.back-link:hover { color: var(--teal); }
+.deep-eyebrow { margin-bottom: 0.8em; }
+.deep-title {
+  font-weight: 600;
+  font-size: clamp(28px, 4.4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.4em;
+}
+.deep-prose { font-size: 17px; line-height: 1.7; }
+.deep-prose h2 {
+  font-size: clamp(20px, 2.4vw, 26px);
+  margin: 2em 0 0.7em;
+  letter-spacing: -0.01em;
+}
+.deep-prose h2:first-child { margin-top: 0; }
+.deep-prose ul, .deep-prose ol { padding-left: 1.3em; }
+.deep-prose li { margin-bottom: 0.5em; }
+.deep-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-size: 0.95em;
+}
+.deep-prose th, .deep-prose td {
+  text-align: left;
+  padding: 0.7em 0.9em;
+  border-bottom: 1px solid var(--border);
+}
+.deep-prose th {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.deep-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  font-family: var(--mono);
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.deep-nav a { color: var(--muted); text-decoration: none; }
+.deep-nav a:hover { color: var(--teal); }
+.deep-nav-back { flex: 1; text-align: center; }
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .scene-stage, html.anim .scene-stage { padding: 6vw 6vw; }
+  [data-caption] { left: 16px; bottom: 16px; font-size: 11px; }
+  .deep-page { padding: 8vh 5vw 10vh; }
+}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ pageTitle or title }}</title>
+<meta name="description" content="{{ dek or 'Working with LLMs: an actionable guide to doing software development with coding agents.' }}">
+<link rel="preload" href="/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/essay.css">
+<script>
+// Engine only activates when JS is on AND the reader hasn't asked for
+// reduced motion. This must run before first paint so there is no flash
+// of scene-animated (invisible) content that then has to snap visible.
+(function () {
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) document.documentElement.classList.add("anim");
+})();
+</script>
+</head>
+<body>
+{{ content | safe }}
+<script defer src="/js/engine.js"></script>
+</body>
+</html>

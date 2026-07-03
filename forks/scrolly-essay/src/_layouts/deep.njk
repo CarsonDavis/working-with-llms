@@ -1,0 +1,25 @@
+---
+layout: base.njk
+eleventyComputed:
+  pageTitle: "{{ title }} · Deep dive · Working With LLMs"
+---
+{% set prev = collections.deepDives | deepAt(-1, num) %}
+{% set next = collections.deepDives | deepAt(1, num) %}
+<main class="deep-page">
+  <a class="back-link" href="/{{ backAnchor }}">&larr; Back to the essay</a>
+  <p class="eyebrow deep-eyebrow">DEEP DIVE &middot; {{ num | pad2 }} &mdash; {{ title | upper }}</p>
+  <h1 class="deep-title">{{ title }}</h1>
+  <div class="prose deep-prose">
+    {{ content | safe }}
+  </div>
+  <hr class="hairline">
+  <nav class="deep-nav" aria-label="Deep dive navigation">
+    <span class="deep-nav-prev">
+      {% if prev %}<a href="{{ prev.url }}">&larr; {{ prev.data.title }}</a>{% endif %}
+    </span>
+    <span class="deep-nav-back"><a href="/{{ backAnchor }}">&larr; Back to the essay</a></span>
+    <span class="deep-nav-next">
+      {% if next %}<a href="{{ next.url }}">{{ next.data.title }} &rarr;</a>{% endif %}
+    </span>
+  </nav>
+</main>
