@@ -1,4 +1,11 @@
+import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
+
 export default function (eleventyConfig) {
+  // Rewrites root-absolute URLs (/css/…, /deep/…) to honor pathPrefix.
+  // No-op for local dev (default prefix "/"); CI passes
+  // --pathprefix=/working-with-llms/scrolly/ for the GitHub Pages subpath.
+  eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
   eleventyConfig.addPassthroughCopy({ "src/css": "css" });
   eleventyConfig.addPassthroughCopy({ "src/js": "js" });
   eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });

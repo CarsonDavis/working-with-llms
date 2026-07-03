@@ -28,6 +28,16 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build site
         run: mkdocs build --strict
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - name: Build scrolly-essay preview
+        working-directory: forks/scrolly-essay
+        run: |
+          npm ci
+          npx @11ty/eleventy --pathprefix=/working-with-llms/scrolly/
+      - name: Add preview under /scrolly/
+        run: cp -R forks/scrolly-essay/_site site/scrolly
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
