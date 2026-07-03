@@ -1,0 +1,602 @@
+/* ==========================================================================
+   Working With LLMs — Field Manual
+   One hand-written stylesheet. No framework, no preprocessor.
+   ========================================================================== */
+
+/* -- Fonts (self-hosted, latin subset variable woff2) -------------------- */
+
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/newsreader-normal.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/newsreader-italic.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2-variations");
+}
+
+/* -- Reset ----------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, h1, h2, h3, h4, p, figure, blockquote, ol, ul, dl, dd, table {
+  margin: 0;
+  padding: 0;
+}
+ul, ol { list-style: none; }
+img, svg { max-width: 100%; display: block; }
+table { border-collapse: collapse; width: 100%; }
+
+/* -- Tokens ------------------------------------------------------------- */
+
+:root {
+  color-scheme: light dark;
+
+  --paper: light-dark(#FAF6EE, #16130E);
+  --surface: light-dark(#F3EDE0, #201C15);
+  --ink: light-dark(#211D16, #E8E2D5);
+  --ink-secondary: light-dark(#5C554A, #A39A88);
+  --hairline: light-dark(#D8D0C0, #3A3428);
+  --accent: light-dark(#9C4221, #D98E62);
+
+  --font-body: "Newsreader Variable", ui-serif, Georgia, serif;
+  --font-furniture: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --measure: 65ch;
+  --margin-col: 18rem;
+  --gap: 3rem;
+
+  font-optical-sizing: auto;
+}
+
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+/* -- Base type ------------------------------------------------------------ */
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.6;
+  font-variation-settings: "opsz" 12;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+strong { font-weight: 650; }
+em { font-style: italic; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code { background: none; padding: 0; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  line-height: 1.25;
+  font-variation-settings: "opsz" 32;
+}
+
+.chapter-body h2 {
+  font-size: 1.35rem;
+  margin: 2.5rem 0 1rem;
+  color: var(--ink);
+}
+.chapter-body h3 {
+  font-size: 1.1rem;
+  margin: 2rem 0 0.75rem;
+  color: var(--ink);
+}
+
+.chapter-body p,
+.chapter-body ul:not([class]),
+.chapter-body ol:not([class]) {
+  margin: 1.1rem 0;
+}
+.chapter-body ul:not([class]) { list-style: disc; padding-left: 1.4em; }
+.chapter-body ol:not([class]) { list-style: decimal; padding-left: 1.4em; }
+.chapter-body li { margin: 0.4rem 0; }
+
+.chapter-body blockquote {
+  border-left: 2px solid var(--hairline);
+  padding-left: 1rem;
+  color: var(--ink-secondary);
+}
+
+hr.hairline {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  margin: 2rem 0;
+}
+
+.newthought {
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+/* -- Site chrome ----------------------------------------------------------- */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: calc(var(--measure) + 2 * var(--gap) + var(--margin-col));
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.site-title {
+  font-family: var(--font-furniture);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-secondary);
+}
+.site-title:hover { color: var(--accent); }
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  width: 2.1rem;
+  height: 2.1rem;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+main { padding: 1.5rem 1.5rem 6rem; }
+
+/* -- Cross-reference lines -------------------------------------------------- */
+
+p.xref {
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-secondary);
+  margin: 1.5rem 0;
+}
+p.xref a { color: var(--ink-secondary); text-decoration-color: var(--hairline); }
+p.xref a:hover { color: var(--accent); }
+
+/* -- Pull quotes ------------------------------------------------------------ */
+
+figure.pull {
+  margin: 2rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent);
+}
+figure.pull blockquote {
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: var(--ink);
+  font-variation-settings: "opsz" 28;
+}
+
+/* -- Designed lists: responsibilities, step blocks, checklist -------------- */
+
+ol.responsibilities {
+  counter-reset: resp;
+  margin: 1.5rem 0;
+  display: grid;
+  gap: 0.75rem;
+}
+ol.responsibilities li {
+  counter-increment: resp;
+  position: relative;
+  padding-left: 2.5rem;
+}
+ol.responsibilities li::before {
+  content: counter(resp);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  font-family: var(--font-furniture);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+ol.step-block {
+  margin: 1.75rem 0;
+  border-top: 1px solid var(--hairline);
+}
+ol.step-block li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.step-num {
+  font-family: var(--font-furniture);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+ol.step-block--small .step-num { font-size: 1.15rem; }
+ol.step-block--small li { padding: 0.75rem 0; }
+.step-text { line-height: 1.5; }
+
+ul.checklist {
+  margin: 1.5rem 0;
+  display: grid;
+  gap: 0.9rem;
+}
+ul.checklist li {
+  position: relative;
+  padding-left: 1.9rem;
+}
+ul.checklist li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  color: var(--accent);
+  font-family: var(--font-furniture);
+  font-weight: 700;
+}
+
+/* -- Designed tables --------------------------------------------------------- */
+
+table.table-designed {
+  margin: 1.75rem 0;
+  font-size: 0.95em;
+}
+table.table-designed thead th {
+  font-family: var(--font-furniture);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--ink-secondary);
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+table.table-designed td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+  border-left: 2px solid transparent;
+  vertical-align: top;
+}
+table.table-designed tbody tr td:first-child {
+  border-left: 2px solid var(--accent);
+  font-weight: 600;
+}
+table.table-roster td:first-child {
+  font-family: var(--font-furniture);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* -- Details disclosure -------------------------------------------------- */
+
+details {
+  margin: 1.5rem 0;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 0.85rem 1.1rem;
+}
+details summary {
+  cursor: pointer;
+  font-family: var(--font-furniture);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details[open] summary { margin-bottom: 0.85rem; }
+details pre, details p:last-child { margin-bottom: 0; }
+
+/* -- Chapter chrome -------------------------------------------------------- */
+
+article.chapter {
+  width: 100%;
+}
+
+.chapter-strip {
+  font-family: var(--font-furniture);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+  margin: 2.5rem 0 1rem;
+}
+
+.chapter-title {
+  font-size: 2.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.chapter-body {
+  display: block;
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  margin: 2rem 0 4rem;
+  flex-wrap: wrap;
+}
+.chapter-nav a { color: var(--ink-secondary); text-decoration: none; }
+.chapter-nav a:hover { color: var(--accent); }
+.chapter-nav-contents a {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+.chapter-nav-prev { text-align: left; }
+.chapter-nav-next { text-align: right; margin-left: auto; }
+
+/* -- Sidenotes / tool-notes -------------------------------------------------
+   Tufte technique: label + hidden checkbox + span, generated at build time
+   from markdown footnotes. Shown in the margin on wide screens via a
+   float + negative-margin pull out of the reading column; collapsed to a
+   tap-to-expand toggle below the breakpoint via the checkbox hack.
+   ---------------------------------------------------------------------- */
+
+.sidenote-number {
+  font-family: var(--font-furniture);
+  font-weight: 700;
+  font-size: 0.7em;
+  color: var(--accent);
+  vertical-align: super;
+  cursor: pointer;
+  padding: 0 0.15em;
+}
+
+.sidenote-toggle { display: none; }
+
+.sidenote {
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--ink-secondary);
+}
+
+.sidenote .code, .sidenote code { font-family: var(--font-mono); }
+
+.tool-note {
+  color: var(--ink-secondary);
+}
+.tool-note code {
+  background: var(--surface);
+  font-weight: 600;
+}
+
+@media (min-width: 1100px) {
+  article.chapter {
+    display: grid;
+    grid-template-columns: 1fr min(var(--measure), 100%) minmax(14rem, var(--margin-col)) 1fr;
+    column-gap: var(--gap);
+  }
+  article.chapter > * {
+    grid-column: 2;
+  }
+
+  .sidenote {
+    float: right;
+    clear: right;
+    width: var(--margin-col);
+    margin-right: calc(-1 * (var(--margin-col) + var(--gap)));
+    margin-top: 0.15em;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .tool-note::before {
+    content: "\2699";
+    color: var(--accent);
+    margin-right: 0.35em;
+  }
+}
+
+@media (max-width: 1099.98px) {
+  article.chapter > * {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+
+  .sidenote {
+    display: none;
+    margin: 0.5rem 0;
+    padding: 0.6rem 0.85rem;
+    background: var(--surface);
+    border-left: 2px solid var(--accent);
+    border-radius: 2px;
+  }
+  .sidenote-toggle:checked + .sidenote {
+    display: block;
+  }
+  .tool-note::before {
+    content: "\2699 ";
+    color: var(--accent);
+  }
+}
+
+/* -- Cover page ------------------------------------------------------------ */
+
+.cover {
+  max-width: calc(var(--measure) + 2 * var(--gap) + var(--margin-col));
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.cover-title {
+  font-size: clamp(2.25rem, 2rem + 2vw, 3.25rem);
+  margin-bottom: 1.75rem;
+}
+
+.cover-dek p {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  max-width: var(--measure);
+}
+
+.cover-epigraph {
+  margin: 2.5rem 0;
+}
+.cover-epigraph blockquote {
+  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+}
+
+.cover-lead {
+  color: var(--ink-secondary);
+  max-width: var(--measure);
+  margin: 1.5rem 0;
+}
+
+.cover-cta {
+  margin: 2rem 0;
+}
+.cover-cta a {
+  font-family: var(--font-furniture);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.2em;
+}
+.cover-cta a:hover { opacity: 0.75; }
+
+.contents-heading {
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+  margin: 2rem 0 1.25rem;
+}
+
+.contents-list { margin: 0 0 2rem; }
+.contents-item a {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--hairline);
+  text-decoration: none;
+  color: var(--ink);
+}
+.contents-item a:hover .contents-title { color: var(--accent); }
+.contents-num {
+  font-family: var(--font-furniture);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+.contents-title {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.contents-dek {
+  display: block;
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  margin-top: 0.25rem;
+}
+
+.colophon {
+  font-family: var(--font-furniture);
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  max-width: var(--measure);
+  margin: 1.5rem 0 0.5rem;
+}
+.colophon a { color: var(--ink-secondary); }
+
+.last-revised {
+  font-family: var(--font-furniture);
+  font-size: 0.8rem;
+  color: var(--ink-secondary);
+  margin: 0 0 3rem;
+}
+
+/* -- Motion --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

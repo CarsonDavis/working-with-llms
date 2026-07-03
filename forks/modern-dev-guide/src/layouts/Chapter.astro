@@ -1,0 +1,76 @@
+---
+import Base from './Base.astro';
+import ChapterRail from '../components/ChapterRail.astro';
+import TopBar from '../components/TopBar.astro';
+import { readingTime } from '../utils/nav.js';
+
+interface Props {
+  entry: any;
+  Content: any;
+  headings: { depth: number; text: string; slug: string }[];
+  prev: any | null;
+  next: any | null;
+}
+
+const { entry, Content, headings, prev, next } = Astro.props;
+const { title, dek, part, order, reviewed } = entry.data;
+const partLabel = part ?? 'Start Here';
+const reviewedStr = new Date(reviewed).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<Base title={`${title} · Working With LLMs`} description={dek}>
+  <header class="site-header">
+    <a class="brand" href="/">Working With LLMs</a>
+    <button type="button" class="theme-toggle" data-theme-toggle>Toggle theme</button>
+  </header>
+
+  <TopBar currentSlug={entry.id} title={title} partLabel={partLabel} />
+
+  <div class="chapter-layout">
+    <ChapterRail currentSlug={entry.id} headings={headings} />
+    <main id="main" class="chapter-main">
+      <header class="chapter-header">
+        <p class="chapter-part-label">{partLabel}</p>
+        <h1 class="chapter-title">{title}</h1>
+        <p class="chapter-dek">{dek}</p>
+        <div class="meta-badges">
+          <span class="meta-badge">Chapter {order} of 7</span>
+          <span class="meta-badge">{readingTime(entry.body)} read</span>
+          <span class="meta-badge">current as of {reviewedStr}</span>
+        </div>
+      </header>
+
+      <article class="prose">
+        <Content />
+      </article>
+
+      <nav class="prev-next" aria-label="Chapter navigation">
+        {
+          prev ? (
+            <a class="prev-next-card prev" href={`/guide/${prev.id}`}>
+              <span class="prev-next-label">← Previous</span>
+              <span class="prev-next-title">{prev.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="prev-next-card next" href={`/guide/${next.id}`}>
+              <span class="prev-next-label">Next →</span>
+              <span class="prev-next-title">{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </main>
+  </div>
+</Base>

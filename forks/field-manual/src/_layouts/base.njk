@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ pageTitle or title }}</title>
+<link rel="preload" href="/fonts/newsreader-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/manual.css">
+<script>
+(function () {
+  var t = localStorage.getItem("theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest("#theme-toggle");
+    if (!btn) return;
+    var cur = document.documentElement.getAttribute("data-theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+  });
+})();
+</script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-title" href="/">Working With LLMs</a>
+  {% include "theme-toggle.njk" %}
+</header>
+<main>
+{{ content | safe }}
+</main>
+</body>
+</html>

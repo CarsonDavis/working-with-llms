@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { getNav, readingTime } from '../utils/nav.js';
+
+const { startHere, parts } = await getNav();
+---
+
+<Base title="Working With LLMs" description="An actionable guide to doing software development with coding agents.">
+  <header class="site-header">
+    <a class="brand" href="/">Working With LLMs</a>
+    <button type="button" class="theme-toggle" data-theme-toggle>Toggle theme</button>
+  </header>
+
+  <main id="main" class="home-main">
+    <section class="hero">
+      <h1>Working With LLMs</h1>
+      <p>
+        Modern agents write good code. The hard part is getting them to build the <em>right</em> thing, the <em
+          >right</em
+        > way, for <em>your</em> project.
+      </p>
+    </section>
+
+    <a class="featured-card" href={`/guide/${startHere.id}`}>
+      <p class="featured-card-label">Start here</p>
+      <h2>{startHere.data.title}</h2>
+      <p>Read Start Here in its entirety. <strong>Do not skim it.</strong></p>
+      <span class="meta-badge">{readingTime(startHere.body)} read</span>
+    </a>
+
+    <div class="card-parts">
+      {
+        parts.map((part) => (
+          <section>
+            <p class="card-part-label">{part.label}</p>
+            <div class="card-grid">
+              {part.chapters.map((chapter) => (
+                <a class="chapter-card" href={`/guide/${chapter.id}`}>
+                  <span class="chapter-card-part">{part.label}</span>
+                  <span class="chapter-card-title">{chapter.data.title}</span>
+                  <span class="chapter-card-dek">{chapter.data.dek}</span>
+                  <span class="meta-badge">{readingTime(chapter.body)} read</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+
+    <footer class="footer-strip">
+      <p>
+        The universal skills and agents this guide points to live in the <a
+          href="https://github.com/CarsonDavis/claude">claude</a
+        > repo. Project-specific skills will be linked to in their respective docs.
+      </p>
+    </footer>
+  </main>
+</Base>

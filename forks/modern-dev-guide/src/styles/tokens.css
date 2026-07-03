@@ -1,0 +1,62 @@
+:root {
+  color-scheme: light dark;
+
+  /* surfaces */
+  --surface-0: light-dark(#fcfcfd, #0e0e11); /* page — never pure white/black */
+  --surface-1: light-dark(#f4f4f6, #17171b); /* cards, code, callout fills */
+  --surface-2: light-dark(#ebebef, #1f1f25); /* hover, active */
+
+  /* text */
+  --text-1: light-dark(#1b1b20, #ececf0); /* body */
+  --text-2: light-dark(#5c5c66, #9d9da8); /* deks, badges, captions */
+
+  /* structure */
+  --border-1: light-dark(#e4e4e9, #26262d); /* hairline dividers */
+
+  /* accent — electric blue, one hue carries links/active-rail/recommendation/focus/diagrams */
+  --accent: light-dark(oklch(0.52 0.19 262), oklch(0.74 0.14 262));
+  --accent-soft: color-mix(in oklab, var(--accent) 10%, transparent);
+
+  /* status — gotcha only, never a second accent */
+  --warn: light-dark(oklch(0.65 0.13 75), oklch(0.78 0.12 80));
+  --warn-soft: color-mix(in oklab, var(--warn) 12%, transparent);
+
+  /* type */
+  --font-body: 'InterVariable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --measure: 68ch;
+
+  --body-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --body-leading: 1.65;
+
+  /* Utopia-ish clamp() scale, ~1.2 ratio */
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.89rem);
+  --step-0: var(--body-size);
+  --step-1: clamp(1.27rem, 1.19rem + 0.4vw, 1.42rem);
+  --step-2: clamp(1.53rem, 1.4rem + 0.65vw, 1.7rem);
+  --step-3: clamp(1.84rem, 1.64rem + 1vw, 2.03rem);
+  --step-4: clamp(2.2rem, 1.9rem + 1.5vw, 2.44rem);
+
+  /* motion */
+  --duration-fast: 120ms;
+  --duration-page: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-page: 0ms;
+  }
+}
+
+/* Manual toggle overrides OS preference by pinning color-scheme, which is
+   what every light-dark() token above resolves against. Set by the inline
+   theme-toggle script before first paint; absent it, the OS preference
+   (color-scheme: light dark above) applies. */
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}

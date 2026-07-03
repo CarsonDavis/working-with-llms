@@ -1,0 +1,25 @@
+---
+layout: base.njk
+eleventyComputed:
+  pageTitle: "Ch. {{ num }} — {{ title | safe }} · Working With LLMs"
+---
+{% set prev = collections.chapters | chapterAt(-1, num) %}
+{% set next = collections.chapters | chapterAt(1, num) %}
+<article class="chapter">
+  <p class="chapter-strip">WORKING WITH LLMS &middot; CHAPTER {{ num }} OF {{ chapterCount }}</p>
+  <h1 class="chapter-title">{{ title }}</h1>
+  <hr class="hairline">
+  <div class="chapter-body">
+    {{ content | safe }}
+  </div>
+  <hr class="hairline">
+  <nav class="chapter-nav" aria-label="Chapter navigation">
+    <span class="chapter-nav-prev">
+      {% if prev %}<a href="{{ prev.url }}">&larr; Ch. {{ prev.data.num }} {{ prev.data.title }}</a>{% endif %}
+    </span>
+    <span class="chapter-nav-contents"><a href="/">Contents</a></span>
+    <span class="chapter-nav-next">
+      {% if next %}<a href="{{ next.url }}">Ch. {{ next.data.num }} {{ next.data.title }} &rarr;</a>{% endif %}
+    </span>
+  </nav>
+</article>

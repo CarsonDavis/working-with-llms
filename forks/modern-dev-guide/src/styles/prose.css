@@ -1,0 +1,356 @@
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: 1.25em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin-top: 2.25em;
+  margin-bottom: 0.6em;
+  scroll-margin-top: 1.5rem;
+}
+
+.prose h2 {
+  font-size: var(--step-2);
+}
+
+.prose h3 {
+  font-size: var(--step-1);
+}
+
+.prose h4 {
+  font-size: var(--step-0);
+}
+
+.prose p,
+.prose li {
+  max-width: var(--measure);
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.prose a:not(.term) {
+  color: var(--accent);
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: from-font;
+}
+
+.prose a:not(.term):hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--border-1);
+  padding-left: 1em;
+  color: var(--text-2);
+  font-style: italic;
+}
+
+/* inline code */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 0.3em;
+  padding: 0.1em 0.35em;
+}
+
+/* code blocks + copy button */
+.prose pre {
+  position: relative;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 0.5em;
+  padding: 1em 1.1em;
+  overflow-x: auto;
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  border-radius: 0.3em;
+  padding: 0.3em 0.6em;
+  cursor: pointer;
+  transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
+}
+
+.copy-button:hover,
+.copy-button:focus-visible {
+  color: var(--text-1);
+  background: var(--surface-2);
+}
+
+/* tables — designed, header band in accent, overflow-safe */
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  font-size: var(--step--1);
+}
+
+.prose th,
+.prose td {
+  padding: 0.75em 1em;
+  text-align: left;
+  border-bottom: 1px solid var(--border-1);
+  vertical-align: top;
+}
+
+.prose thead th {
+  background: var(--accent);
+  color: light-dark(#fff, #0e0e11);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prose tbody tr:hover {
+  background: var(--surface-1);
+}
+
+/* glossary term links */
+.term {
+  color: var(--text-1);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.term:hover,
+.term:focus-visible {
+  text-decoration-style: solid;
+}
+
+/* callouts */
+.callout {
+  margin: 1.75em 0;
+  padding: 1em 1.25em;
+  border-radius: 0.4em;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-left-width: 3px;
+}
+
+.callout::before {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+  content: attr(data-callout-type);
+}
+
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+.callout-recommendation {
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.callout-recommendation::before {
+  color: var(--accent);
+}
+
+.callout-recommendation::before {
+  content: '▸ ' attr(data-callout-type);
+}
+
+.callout-gotcha {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.callout-gotcha::before {
+  color: light-dark(color-mix(in oklab, var(--warn) 70%, black), var(--warn));
+  content: '⚠ ' attr(data-callout-type);
+}
+
+.callout-ownit {
+  border-left-width: 3px;
+  border-color: var(--text-2);
+  background: var(--surface-1);
+}
+
+.callout-ownit::before {
+  color: var(--text-2);
+}
+
+/* numbered-step treatment: counters + connectors, no images */
+.steps {
+  margin: 1.75em 0;
+}
+
+.steps ul,
+.steps ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: step;
+  margin: 0;
+}
+
+.steps li {
+  position: relative;
+  counter-increment: step;
+  padding: 0.15em 0 0.15em 2.6em;
+  margin-top: 0 !important;
+}
+
+.steps li + li {
+  margin-top: 1em !important;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 1.8em;
+  height: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.steps li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 0.9em;
+  top: 2em;
+  bottom: -1.1em;
+  width: 1px;
+  background: var(--border-1);
+}
+
+/* diagrams — inline SVG follows theme via currentColor/var() in the file */
+figure.diagram {
+  margin: 2em 0;
+  padding: 1.25em;
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 0.5em;
+  overflow-x: auto;
+}
+
+figure.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+figure.diagram.diagram-small svg {
+  max-width: 420px;
+}
+
+figure.diagram text {
+  font-family: var(--font-body);
+}
+
+/* glossary popover (Popover API). Anchored above the term via CSS anchor
+   positioning where supported; centered-fixed fallback otherwise. Without
+   JS or Popover support, .term is just a link to /glossary#term. */
+[popover].term-popover {
+  margin: 0;
+  padding: 0.85em 1.1em;
+  max-width: 26rem;
+  background: var(--surface-1);
+  color: var(--text-1);
+  border: 1px solid var(--border-1);
+  border-radius: 0.5em;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.16);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease, overlay var(--duration-fast) ease allow-discrete,
+    display var(--duration-fast) ease allow-discrete;
+}
+
+[popover].term-popover:popover-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@starting-style {
+  [popover].term-popover:popover-open {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+
+.term-popover .term-popover-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4em;
+}
+
+.term-popover a {
+  color: var(--accent);
+}
+
+/* CSS anchor positioning where supported; otherwise centered fallback set
+   inline by the enhancer script. */
+@supports (anchor-name: --x) {
+  .term-popover {
+    position-anchor: --active-term;
+    position-area: top;
+    position-try-fallbacks: flip-block;
+    margin-bottom: 0.5em;
+  }
+}

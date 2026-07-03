@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import Chapter from '../../layouts/Chapter.astro';
+import { getNav } from '../../utils/nav.js';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('guide');
+  const { all } = await getNav();
+
+  return entries.map((entry) => {
+    const index = all.findIndex((e) => e.id === entry.id);
+    return {
+      params: { slug: entry.id },
+      props: {
+        entry,
+        prev: index > 0 ? all[index - 1] : null,
+        next: index < all.length - 1 ? all[index + 1] : null,
+      },
+    };
+  });
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<Chapter entry={entry} Content={Content} headings={headings} prev={prev} next={next} />

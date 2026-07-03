@@ -1,0 +1,78 @@
+---
+// Left sticky rail, desktop >=1100px (see .topbar / TopBar.astro for the
+// mobile equivalent). Works with zero JS: plain nested links, current page
+// marked via aria-current — fully usable as a static TOC. With JS,
+// scrollspy.js adds a sliding accent indicator down the current page's h2
+// list as you read.
+import { getNav } from '../utils/nav.js';
+
+interface Props {
+  currentSlug: string;
+  headings: { depth: number; text: string; slug: string }[];
+}
+
+const { currentSlug, headings } = Astro.props;
+const { startHere, parts } = await getNav();
+const h2s = headings.filter((h) => h.depth === 2);
+
+function isCurrent(slug) {
+  return slug === currentSlug;
+}
+---
+
+<nav class="rail" aria-label="Chapters">
+  <a class="rail-home" href="/">Working With LLMs</a>
+
+  <ul class="rail-list">
+    <li>
+      <a
+        href={`/guide/${startHere.id}`}
+        class="rail-link"
+        aria-current={isCurrent(startHere.id) ? 'page' : undefined}
+      >
+        {startHere.data.title}
+      </a>
+      {
+        isCurrent(startHere.id) && h2s.length > 0 && (
+          <ul class="rail-subnav" data-scrollspy>
+            {h2s.map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </li>
+  </ul>
+
+  {
+    parts.map((part) => (
+      <div class="rail-part">
+        <p class="rail-part-label">{part.label}</p>
+        <ul class="rail-list">
+          {part.chapters.map((chapter) => (
+            <li>
+              <a
+                href={`/guide/${chapter.id}`}
+                class="rail-link"
+                aria-current={isCurrent(chapter.id) ? 'page' : undefined}
+              >
+                {chapter.data.title}
+              </a>
+              {isCurrent(chapter.id) && h2s.length > 0 && (
+                <ul class="rail-subnav" data-scrollspy>
+                  {h2s.map((h) => (
+                    <li>
+                      <a href={`#${h.slug}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</nav>

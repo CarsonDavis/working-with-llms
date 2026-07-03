@@ -1,0 +1,57 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/prose.css';
+import '../styles/layout.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'An actionable guide to doing software development with coding agents.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <link rel="preload" href="/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMonoVariable.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Applied before first paint so there's no flash of the wrong theme.
+         Without JS, color-scheme: light dark (tokens.css) follows the OS. -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+    <script>
+      const html = document.documentElement;
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('[data-theme-toggle]')) return;
+        const osDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = (html.getAttribute('data-theme') || (osDark ? 'dark' : 'light')) === 'dark';
+        const next = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    </script>
+    <script src="../scripts/copy-button.js"></script>
+    <script src="../scripts/glossary-popover.js"></script>
+    <script src="../scripts/scrollspy.js"></script>
+  </body>
+</html>

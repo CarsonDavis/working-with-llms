@@ -1,0 +1,52 @@
+[
+  {
+    "id": "harness",
+    "term": "harness",
+    "definition": "The scaffolding around a raw model that makes instruction-following reliable — built-in planning, test verification, code review, and guardrails — turning a next-word predictor into a real coding partner."
+  },
+  {
+    "id": "flagship-model",
+    "term": "flagship model",
+    "definition": "The most capable model in a family, worth reaching for on complex or loosely-constrained tasks that need real judgment and planning, as opposed to small mechanical work where a cheaper model is fine."
+  },
+  {
+    "id": "context-window",
+    "term": "context window",
+    "definition": "The finite span of text a model can hold and attend to at once. A real codebase doesn't fit usefully in it, which is why understanding has to be pre-digested into docs rather than handed over as raw code."
+  },
+  {
+    "id": "spec",
+    "term": "spec",
+    "definition": "A design document, written from exploring the actual code, that an implementation agent builds to and a review agent checks the diff against. Nothing gets built until it's approved."
+  },
+  {
+    "id": "skill",
+    "term": "skill",
+    "definition": "A packaged, repeatable procedure you wrap an agent workflow in so it runs the same way every time, instead of holding the structure in your head and re-explaining it each session."
+  },
+  {
+    "id": "subagent",
+    "term": "subagent",
+    "definition": "A secondary agent spawned to do a bounded piece of work — such as studying, cross-referencing, and synthesizing files — in parallel with or on behalf of the main agent."
+  },
+  {
+    "id": "worktree",
+    "term": "worktree",
+    "definition": "An isolated git checkout that lets several agent tasks run side by side on your machine, each with its own files, without stepping on each other."
+  },
+  {
+    "id": "commit-pinned",
+    "term": "commit-pinned",
+    "definition": "Stamped with the commit an implementation plan was written against, so a plan drafted days before it's implemented doesn't quietly go stale as the code moves underneath it."
+  },
+  {
+    "id": "claude-md",
+    "term": "CLAUDE.md",
+    "definition": "A file of directional principles and clear do's and don'ts that a good harness follows deliberately. Best kept general — because a guardrailed agent follows instructions to the letter, an over-specific rule can be worse than nothing at all."
+  },
+  {
+    "id": "orchestration",
+    "term": "orchestration",
+    "definition": "Driving the spec → implement → review loop end-to-end — by prompting it yourself, letting the harness run it, or wrapping it in a repo-specific skill you write to constrain it."
+  }
+]

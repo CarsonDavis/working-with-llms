@@ -1,0 +1,54 @@
+---
+// Mobile equivalent of ChapterRail: a slim top bar (part · title) with a
+// <details>-based chapter menu. Native element, no JS required to open it.
+import { getNav } from '../utils/nav.js';
+
+interface Props {
+  currentSlug: string;
+  title: string;
+  partLabel: string;
+}
+
+const { currentSlug, title, partLabel } = Astro.props;
+const { startHere, parts } = await getNav();
+
+function isCurrent(slug) {
+  return slug === currentSlug;
+}
+---
+
+<div class="topbar">
+  <details class="topbar-menu">
+    <summary>
+      <span class="topbar-current">
+        <span class="topbar-part">{partLabel}</span>
+        <span class="topbar-title">{title}</span>
+      </span>
+    </summary>
+    <nav aria-label="Chapters">
+      <ul class="rail-list">
+        <li>
+          <a href={`/guide/${startHere.id}`} aria-current={isCurrent(startHere.id) ? 'page' : undefined}>
+            {startHere.data.title}
+          </a>
+        </li>
+      </ul>
+      {
+        parts.map((part) => (
+          <div class="rail-part">
+            <p class="rail-part-label">{part.label}</p>
+            <ul class="rail-list">
+              {part.chapters.map((chapter) => (
+                <li>
+                  <a href={`/guide/${chapter.id}`} aria-current={isCurrent(chapter.id) ? 'page' : undefined}>
+                    {chapter.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+  </details>
+</div>
