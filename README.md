@@ -8,7 +8,7 @@ This guide will not try to teach you everything you will ever need to know about
 
 ## How to use it
 
-Read **[Start Here](guide/START-HERE.md)** in its entirety.
+Read **Start Here** in its entirety.
 
 Do not skim it.
 
