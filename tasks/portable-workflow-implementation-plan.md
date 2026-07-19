@@ -1,8 +1,13 @@
 # Implementation Plan: The Working With LLMs Install & Enforcement System
 
-**Status:** Draft for review · 2026-07-19
+**Status:** Phases 1–2 shipped · 2026-07-19
 **Builds on:** `tasks/research/portable-workflow/` (synthesis + candidate architectures)
 **Chosen architecture:** Candidate B (native plugin marketplace + per-repo adoption)
+
+**Progress:**
+- ✅ **Phase 1** — repo is a marketplace (`wwl`) carrying the plugin; 3 skills moved in; guide links rewired; author's machine migrated to the user-scope plugin install; skills removed from `CarsonDavis/claude`. Plugin `0.1.0`.
+- ✅ **Phase 2** — `project-review` agent shipped (three-cadence readiness model + health-report artifact w/ markdown fallback); tested against broken + healthy fixtures; definitional flaws fixed and re-verified. Plugin `0.2.0`.
+- ⏳ **Phase 3** — the Setup page + hub move. ⏳ **Phase 4** — heavy mode + `/adopt-workflow`.
 
 ---
 
