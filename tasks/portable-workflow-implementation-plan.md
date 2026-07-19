@@ -6,8 +6,9 @@
 
 **Progress:**
 - ✅ **Phase 1** — repo is a marketplace (`wwl`) carrying the plugin; 3 skills moved in; guide links rewired; author's machine migrated to the user-scope plugin install; skills removed from `CarsonDavis/claude`. Plugin `0.1.0`.
-- ✅ **Phase 2** — `project-review` agent shipped (three-cadence readiness model + health-report artifact w/ markdown fallback); tested against broken + healthy fixtures; definitional flaws fixed and re-verified. Plugin `0.2.0`.
-- ⏳ **Phase 3** — the Setup page + hub move. ⏳ **Phase 4** — heavy mode + `/adopt-workflow`.
+- ✅ **Phase 2** — `project-review` agent shipped (three-cadence readiness model + health-report artifact w/ markdown fallback); tested against broken + healthy fixtures; definitional flaws fixed and re-verified. Verified live end-to-end in a real session (Artifact report rendered). Plugin `0.2.0`.
+- 🟡 **Phase 3** — Setup page (`guide/setup.md`) written, added to nav, `site_url` pointed at the hub, Start Here + Workflow pitches added; strict mkdocs build passes. **Pending:** the page is not yet live at `llms.codebycarson.com/working-with-llms/setup/` (404) — this repo's Pages deploy now only emits redirect stubs; the real guide is built by the **hub's CI (code-by-carson side)** from this repo's source, which must rebuild from `main` for the page to go live. The terminal install path works today regardless of the site.
+- ⏳ **Phase 4** — heavy mode + `/adopt-workflow`.
 
 ---
 
