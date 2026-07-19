@@ -12,7 +12,7 @@
     {
       "name": "working-with-llms",
       "source": "./plugins/working-with-llms",
-      "description": "Skills for the Working With LLMs workflow: writing a vision, writing GitHub issues, and mining PR reviews. Agents and process enforcement are added in later releases."
+      "description": "The Working With LLMs workflow: skills for writing a vision, writing GitHub issues, and mining PR reviews, plus a project-review agent for checking repo readiness. Process enforcement is added in later releases."
     }
   ]
 }
