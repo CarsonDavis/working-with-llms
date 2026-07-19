@@ -43,4 +43,4 @@ But this beautiful process only works if you actually read what the agent drafte
 
 ## The skill
 
-We have a skill that does all of this: it takes your brain dump, asks about anything missing, researches the repo to check the work is viable, proposes a split if it's too big, and writes the two-layer draft for you to edit and file. → [writing-github-issues skill](https://github.com/CarsonDavis/claude/tree/master/skills/writing-github-issues)
+We have a skill that does all of this: it takes your brain dump, asks about anything missing, researches the repo to check the work is viable, proposes a split if it's too big, and writes the two-layer draft for you to edit and file. → [writing-github-issues skill](https://github.com/CarsonDavis/working-with-llms/tree/main/plugins/working-with-llms/skills/writing-github-issues)

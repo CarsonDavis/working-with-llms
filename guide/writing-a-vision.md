@@ -29,4 +29,4 @@ It's a tracked artifact. The project owner approves it and owns it. The agent re
 
 ## The skill
 
-We have a skill that helps you write a vision.md. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/CarsonDavis/claude/tree/master/skills/writing-a-vision)
+We have a skill that helps you write a vision.md. It hands you a set of brain-dump prompts, listens while you talk through the project, and organizes your answers into a draft `vision.md` for you to edit. It is deliberately built so that you still own and write the actual content; the skill only structures what you said. → [writing-a-vision](https://github.com/CarsonDavis/working-with-llms/tree/main/plugins/working-with-llms/skills/writing-a-vision)

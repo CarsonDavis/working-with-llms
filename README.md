@@ -18,4 +18,4 @@ It is short, it is concise, and it walks the whole approach end to end. If you w
 
 ## The tools
 
-The universal skills and agents this guide points to live in the [claude](https://github.com/CarsonDavis/claude) repo. Project-specific skills will be linked to in their respective docs.
+The skills this guide points to are packaged as an installable plugin in this repo, under [`plugins/working-with-llms`](https://github.com/CarsonDavis/working-with-llms/tree/main/plugins/working-with-llms). Some general-purpose agents and utilities live in the separate [claude](https://github.com/CarsonDavis/claude) repo. Project-specific skills are linked to in their respective docs.

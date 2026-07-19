@@ -1,0 +1,13 @@
+{
+  "name": "working-with-llms",
+  "version": "0.1.0",
+  "description": "Skills for the Working With LLMs workflow — writing a vision, writing GitHub issues, and mining PR reviews. The installable companion to the guide at llms.codebycarson.com/working-with-llms.",
+  "author": {
+    "name": "Carson Davis",
+    "url": "https://github.com/CarsonDavis"
+  },
+  "homepage": "https://llms.codebycarson.com/working-with-llms/",
+  "repository": "https://github.com/CarsonDavis/working-with-llms",
+  "license": "MIT",
+  "keywords": ["workflow", "vision", "issues", "code-review", "agents"]
+}
