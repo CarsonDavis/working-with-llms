@@ -6,6 +6,9 @@ If you have a good issue, the hard decisions should already be made. The project
 
 So if you find yourself deeply uncertain about what to build once coding starts, that probably means the planning wasn't finished. Either go back to the issue phase and spend more time on it with your team, or, if the work is genuinely exploratory and the uncertainty is the whole point, handle it as an exploratory task (see the bottom of this page).
 
+Before you start, it's worth a quick gut-check that the repo is actually set up for good work — a vision, real docs, a `CLAUDE.md`, an issue for the task. Ask Claude Code to **"check my setup"** and the `project-review` agent will tell you what's missing. → **[Setup](setup.md)**
+
+
 ## What should happen, and who makes it happen
 
 The core loop is small: the agent writes a spec from your issue and the current code, an implementer builds to that spec, and a fresh agent reviews the result against it. [Start Here](START-HERE.md) walks the full sequence; the point here is that there is more than one way to make that loop happen.

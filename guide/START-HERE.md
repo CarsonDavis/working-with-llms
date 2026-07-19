@@ -76,6 +76,9 @@ This guide doesn't yet cover hooks, but they are another tool you can use alongs
 
 Once your team has a clear vision, sufficient documentation, and a well-formed issue, the actual coding workflow goes something like this:
 
+Not sure a repo has those yet? Once the tools are installed, ask Claude Code to **"check my setup"** and the `project-review` agent will report what's in place and what's missing. → **[set up the tools](setup.md)**
+
+
 1. The agent reads the **`vision.md`**.
 2. Then it reads the **repo docs** the team crafted.
 3. Then it reads the **task** the team carefully wrote.

@@ -1,6 +1,6 @@
 site_name: Working With LLMs
 site_description: An actionable guide to doing software development with coding agents.
-site_url: https://madebycarson.com/working-with-llms/
+site_url: https://llms.codebycarson.com/working-with-llms/
 
 repo_name: CarsonDavis/working-with-llms
 repo_url: https://github.com/CarsonDavis/working-with-llms
@@ -41,6 +41,7 @@ theme:
 nav:
   - Home: index.md
   - Start Here: START-HERE.md
+  - Setup: setup.md
   - Harness & Model: harness-and-model.md
   - Writing a Vision: writing-a-vision.md
   - Codebase Docs: codebase-docs.md
