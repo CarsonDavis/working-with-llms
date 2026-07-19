@@ -1,4 +1,11 @@
-name: Deploy docs site
+name: Deploy redirect stubs
+
+# The guide has MOVED to https://llms.codebycarson.com/working-with-llms/ .
+# This Pages deploy no longer publishes the guide itself — it publishes one
+# lightweight redirect stub per page so old madebycarson.com/working-with-llms/
+# links (including deep links) forward to the new home. The guide SOURCE
+# (guide/, mkdocs.yml, hooks/) stays in this repo; the new site's CI builds the
+# real guide from it. See tools/build_redirects.py.
 
 on:
   push:
@@ -24,20 +31,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.x"
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Build site
-        run: mkdocs build --strict
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-      - name: Build scrolly-essay preview
-        working-directory: forks/scrolly-essay
-        run: |
-          npm ci
-          npx @11ty/eleventy --pathprefix=/working-with-llms/scrolly/
-      - name: Add preview under /scrolly/
-        run: cp -R forks/scrolly-essay/_site site/scrolly
+      - name: Generate redirect stubs
+        run: python3 tools/build_redirects.py
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
