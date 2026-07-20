@@ -18,4 +18,6 @@ It is short, it is concise, and it walks the whole approach end to end. If you w
 
 ## The tools
 
-The skills this guide points to are packaged as an installable plugin in this repo, under [`plugins/working-with-llms`](https://github.com/CarsonDavis/working-with-llms/tree/main/plugins/working-with-llms). Some general-purpose agents and utilities live in the separate [claude](https://github.com/CarsonDavis/claude) repo. Project-specific skills are linked to in their respective docs.
+The skills and agents this guide points to are packaged as an installable plugin. **[Head to Setup](guide/setup.md)** to install it in one command, adopt a repo, or check whether your project is ready to work in.
+
+The plugin lives in this repo under [`plugins/working-with-llms`](https://github.com/CarsonDavis/working-with-llms/tree/main/plugins/working-with-llms); some general-purpose agents and utilities live in the separate [claude](https://github.com/CarsonDavis/claude) repo. Project-specific skills are linked to in their respective docs.
