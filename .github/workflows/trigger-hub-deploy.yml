@@ -1,0 +1,58 @@
+name: Trigger hub deploy
+
+# The guide's real published home is the hub at llms.codebycarson.com, which is
+# built and served by the separate CarsonDavis/code-by-carson repo (its
+# deploy-llms.yml checks out this repo's `main` and builds the guide from it).
+# This repo's own Pages deploy only emits redirect stubs. So when the guide
+# SOURCE changes here, we must poke the hub to rebuild — otherwise the published
+# guide silently drifts behind its source.
+#
+# Security model (least privilege):
+#   * No long-lived PAT. We mint a short-lived GitHub App installation token at
+#     run time, scoped to ONLY the code-by-carson repo, carrying only the
+#     Actions:write permission the App was granted.
+#   * This job's own GITHUB_TOKEN is given NO permissions (permissions: {}) —
+#     all cross-repo auth is the minted token, nothing else.
+#   * Only guide-affecting paths trigger it, so unrelated pushes (e.g. plugin
+#     changes) don't fire a needless production deploy.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "guide/**"
+      - "mkdocs.yml"
+      - "hooks/**"
+      - "README.md"
+  workflow_dispatch: {}
+
+# The repo GITHUB_TOKEN needs nothing here; deny everything.
+permissions: {}
+
+# Never run two hub-deploy pokes at once; don't cancel one mid-flight.
+concurrency:
+  group: hub-deploy-trigger
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      # Mint a short-lived (~1h) installation token scoped to ONLY code-by-carson.
+      # actions/create-github-app-token is a first-party GitHub action.
+      - name: Mint scoped token for the hub repo
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.HUB_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.HUB_DEPLOY_APP_PRIVATE_KEY }}
+          owner: CarsonDavis
+          repositories: code-by-carson
+
+      - name: Poke the hub deploy workflow
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh workflow run deploy-llms.yml \
+            --repo CarsonDavis/code-by-carson \
+            --ref master
