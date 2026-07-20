@@ -1,14 +1,14 @@
 # Implementation Plan: The Working With LLMs Install & Enforcement System
 
-**Status:** Phases 1–2 shipped · 2026-07-19
+**Status:** All 4 phases shipped · plugin `0.3.0` · 2026-07-20
 **Builds on:** `tasks/research/portable-workflow/` (synthesis + candidate architectures)
 **Chosen architecture:** Candidate B (native plugin marketplace + per-repo adoption)
 
 **Progress:**
 - ✅ **Phase 1** — repo is a marketplace (`wwl`) carrying the plugin; 3 skills moved in; guide links rewired; author's machine migrated to the user-scope plugin install; skills removed from `CarsonDavis/claude`. Plugin `0.1.0`.
 - ✅ **Phase 2** — `project-review` agent shipped (three-cadence readiness model + health-report artifact w/ markdown fallback); tested against broken + healthy fixtures; definitional flaws fixed and re-verified. Verified live end-to-end in a real session (Artifact report rendered). Plugin `0.2.0`.
-- 🟡 **Phase 3** — Setup page (`guide/setup.md`) written, added to nav, `site_url` pointed at the hub, Start Here + Workflow pitches added; strict mkdocs build passes. **Pending:** the page is not yet live at `llms.codebycarson.com/working-with-llms/setup/` (404) — this repo's Pages deploy now only emits redirect stubs; the real guide is built by the **hub's CI (code-by-carson side)** from this repo's source, which must rebuild from `main` for the page to go live. The terminal install path works today regardless of the site.
-- ⏳ **Phase 4** — heavy mode + `/adopt-workflow`.
+- ✅ **Phase 3** — Setup page (`guide/setup.md`) written, added to nav, `site_url` pointed at the hub, Start Here + Workflow pitches added; strict mkdocs build passes. **Live** at `llms.codebycarson.com/working-with-llms/setup/` (200). Deploy is a manual CLI step (`gh workflow run deploy-llms.yml --repo CarsonDavis/code-by-carson`) documented in `CLAUDE.md`; the App/PAT auto-trigger was rejected (credential creation is UI-only). Also added a repo `CLAUDE.md`.
+- ✅ **Phase 4** — heavy mode + `/adopt-workflow`. `UserPromptSubmit` hook (`heavy-mode.sh`) injects a once-per-session issue-before-code reminder ONLY in repos carrying a `.claude/wwl.json` soft marker; fails open everywhere else (no marker/jq/adopted/off → silent); never blocks; cooldown is a temp flag, no writes to the committed marker. `/adopt-workflow` command writes+commits the marketplace pointer + marker and recommends branch protection. Hook contract verified against Claude Code docs; unit-tested across adopted/non-adopted/cooldown/off/subdir/malformed. Plugin `0.3.0`. **Not yet confirmed live:** the hook firing inside a real adopted-repo session (best verified interactively, like project-review was).
 
 ---
 
