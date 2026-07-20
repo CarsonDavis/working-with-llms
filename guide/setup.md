@@ -3,7 +3,7 @@
 The guide teaches the workflow; this page gets it onto your machine. The tools ship as a
 Claude Code plugin, so installing is two commands, and there is nothing to copy by hand.
 
-There are two different jobs here, on two different clocks:
+There are two different jobs here:
 
 - **If you write code:** install the plugin once, per machine. That gives you the skills and
   the `project-review` agent everywhere.
@@ -61,8 +61,10 @@ Do this once per repo, for the repos your team should follow the process in. It 
 deliberate, per-repo decision — the workflow does not switch itself on in your dotfiles or a
 throwaway script.
 
-Commit a `.claude/settings.json` into the repo so anyone who clones and trusts it is prompted
-to install the plugin on their first session — no per-person setup:
+The one-command way is to run **`/adopt-workflow`** inside the repo — it writes and commits the
+two files below: the marketplace pointer and the enforcement marker. To do it by hand, commit a
+`.claude/settings.json` so anyone who clones and trusts the repo is prompted to install the
+plugin on their first session — no per-person setup:
 
 ```json
 {
@@ -88,16 +90,21 @@ it. You can also let the CLI write the marketplace entry for you:
 Then commit it. On clone, teammates get the trust prompt (their consent gate) and the plugin
 follows.
 
-For the gates that must be un-skippable — no merge to `main` without review, for instance —
-reach for your host's **branch protection**, not the harness. The plugin makes the right
-thing the easy default; branch protection makes the wrong thing impossible. As the guide
-says elsewhere, don't try to fix organizational problems inside a coding session.
+### Enforcement: issue-before-code
 
-!!! note "Automatic enforcement is coming"
-    A later release adds *heavy mode*: an opt-in, per-repo gate that notices when you start
-    substantial work without an issue and routes you into `writing-github-issues` before you
-    code. Until then, adoption is the settings file above plus the habit of running the
-    readiness check below.
+`/adopt-workflow` also writes a `.claude/wwl.json` marker that turns on **soft enforcement** in
+this repo:
+
+```json
+{ "version": 1, "adopted": true, "enforce": { "issueBeforeCode": "soft" } }
+```
+
+With the marker in place, when someone starts substantial work here — a feature, a refactor, a
+non-trivial bugfix — and there's no scoped issue for it, the plugin quietly reminds them (once
+per session) to draft one with `working-with-llms:writing-github-issues` before writing code.
+It **never blocks**, and it stays completely silent in any repo without the marker. Set
+`issueBeforeCode` to `"off"` to turn it off (a blocking `"hard"` mode is intentionally not built
+yet).
 
 ---
 
