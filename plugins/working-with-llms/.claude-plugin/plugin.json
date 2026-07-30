@@ -1,6 +1,6 @@
 {
   "name": "working-with-llms",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "The Working With LLMs workflow: skills for writing a vision, writing GitHub issues, and mining PR reviews; a project-review agent that checks a repo's readiness for agentic work; and an /adopt-workflow command plus opt-in, per-repo soft enforcement that nudges you to write an issue before substantial work. The installable companion to the guide at llms.codebycarson.com/working-with-llms.",
   "author": {
     "name": "Carson Davis",

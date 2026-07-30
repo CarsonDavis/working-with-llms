@@ -1,10 +1,10 @@
 # Review dimensions
 
-The categories a verdict's `category` field must use. They mirror the review
-pipeline in the llm-conventions repo (`standard-artifacts/review.md`,
-https://github.com/NASA-IMPACT/llm-conventions) so the distilled draft drops
-straight into that framework. Pick the single best fit; use `emergent` only when
-none fit.
+The categories a verdict's `category` field must use. They mirror the custom review
+pipeline on the guide's Review Loop page
+(https://llms.codebycarson.com/working-with-llms/review-loop/) so the distilled
+draft drops straight into that framework. Pick the single best fit; use `emergent`
+only when none fit.
 
 | Category | What it covers | Example comment |
 |---|---|---|

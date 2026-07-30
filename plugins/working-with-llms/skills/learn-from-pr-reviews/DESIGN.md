@@ -9,10 +9,10 @@
 ## Purpose
 
 A reviewer's accumulated judgement lives only in scattered PR comments. This skill
-mines that history and distills it into a reusable review artifact — the §3 "Review"
-core document and pipeline defined in the **llm-conventions** repo
-(`standard-artifacts/overview.md` + `standard-artifacts/review.md`,
-https://github.com/NASA-IMPACT/llm-conventions).
+mines that history and distills it into a reusable review artifact — the custom
+`review.md` and review pipeline described on the guide's **Review Loop** page
+(https://llms.codebycarson.com/working-with-llms/review-loop/). The skill ships in
+this repo's plugin (`plugins/working-with-llms/`), the guide's companion.
 
 The central insight: **a comment existing does not mean it was meaningful, and a
 comment being made does not mean it was acted on.** A useful corpus must separate

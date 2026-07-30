@@ -7,10 +7,10 @@ description: Use when you want to extract reusable code-review wisdom from a rep
 
 Turn a repository's entire pull-request review history into (a) a verified,
 categorized **wisdom corpus** and (b) a **DRAFT** `review.md` checklist +
-review-agent prompt. Built to seed the §3 "Review" core document in the
-**llm-conventions** repo — `standard-artifacts/review.md`
-(https://github.com/NASA-IMPACT/llm-conventions). See this repo's README for
-how the two relate.
+review-agent prompt. Built to seed the custom review pipeline described on the
+guide's **Review Loop** page
+(https://llms.codebycarson.com/working-with-llms/review-loop/), which is where
+this skill is documented.
 
 **Central principle:** a comment existing ≠ it was meaningful, and a comment
 being made ≠ it was acted on. Every comment is judged against the *actual code*
@@ -109,8 +109,9 @@ Read `03-verdicts.jsonl`. Keep `substantive: true`. Group by `category`
 
 Write `05-review-draft.md`:
 - A `review.md`-style checklist grouped by the same dimensions.
-- A review-agent prompt skeleton aligned to the `review.md` pipeline in the
-  llm-conventions repo (https://github.com/NASA-IMPACT/llm-conventions).
+- A review-agent prompt skeleton aligned to the custom review pipeline on the
+  guide's Review Loop page
+  (https://llms.codebycarson.com/working-with-llms/review-loop/).
 - Mark every section **DRAFT — human review required** and keep the supporting
   PR links inline so a human can verify each rule against its evidence.
 
