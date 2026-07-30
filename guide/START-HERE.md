@@ -14,11 +14,11 @@ So when working with LLMs you have a few clear responsibilities:
 
 ## 1. Foundation: a capable model and a real harness
 
-**Model.** The more complex and the less well-constrained your task is, the more benefit you will get from using a flagship model. We have the most experience with **Claude Opus 4.8**; but other flagships from OpenAI, Gemini, etc. can drop in as long as you are using a good harness and carefully engineering your context.
+**Model.** The more complex and the less well-constrained your task is, the more benefit you will get from using a flagship model. We have the most experience with **Claude**; but other flagships from OpenAI, Gemini, etc. can drop in as long as you are using a good harness and carefully engineering your context.
 
 **Harness.** A raw model is basically a fancy next-word predictor, and is not necessarily a good coding partner. A coding harness adds the scaffolding that makes instruction-following reliable, gives you built-in planning, adds test verification, code review, guardrails, and much more.
 
-Many on our team have had good experience using the Claude Code harness on top of the model Opus 4.8, and then layering the pcvelz/superpowers harness on top of that.
+Many on our team have had good experience using the Claude Code harness on top of a flagship Claude model, and then layering the pcvelz/superpowers harness on top of that.
 
 Harnesses and models improve and change over time, and exact recommendations go out of date within months of being written. Don't stress about using the bleeding edge as long as you're using something. → **[more on harnesses and models](harness-and-model.md)**
 

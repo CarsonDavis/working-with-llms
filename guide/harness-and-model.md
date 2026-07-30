@@ -2,7 +2,7 @@
 
 ## The model
 
-For most tasks that aren't tightly bounded, use a powerful flagship model, and when in doubt reach for the most capable one you have. We have the most experience with Claude Opus 4.8, but the latest flagships from OpenAI and Gemini drop in just as well.
+For most tasks that aren't tightly bounded, use a powerful flagship model, and when in doubt reach for the most capable one you have. We have the most experience with Claude, but the latest flagships from OpenAI and Gemini drop in just as well.
 
 Don't chase leaderboards: the "best" model changes every few weeks, and the gap between the top flagships is almost never what makes or breaks a task. For small, mechanical, tightly-scoped work, a cheaper or faster model is often fine; for anything that needs real judgment or planning, use the strongest one available to you and give it access to as much quality context as you can.
 
@@ -10,7 +10,7 @@ Don't chase leaderboards: the "best" model changes every few weeks, and the gap 
 
 A raw model is a fancy next-word predictor. Give it a feature to build and it might start strong, drift halfway through, and then hand you something almost-but-not-quite right. A harness fixes that by turning "build me this" into a gated pipeline: each step is pinned to something concrete, and nothing moves forward until it checks out.
 
-Many on our team run a stack of harnesses: Claude Code on top of Opus 4.8, and then [pcvelz/superpowers](https://github.com/pcvelz/superpowers) on top of that.
+Many on our team run a stack of harnesses: Claude Code on top of a flagship Claude model, and then [pcvelz/superpowers](https://github.com/pcvelz/superpowers) on top of that.
 
 Here's the loop the superpowers harness runs when you hand it a task:
 
@@ -28,8 +28,8 @@ Superpowers does plenty more in the same spirit (systematic debugging before pro
 Install it with:
 
 ```
-/plugin marketplace add pcvelz/superpowers
-/plugin install superpowers-extended-cc@superpowers-extended-cc-marketplace
+claude plugin marketplace add pcvelz/superpowers
+claude plugin install superpowers-extended-cc
 ```
 
 ## Practical notes

@@ -15,13 +15,13 @@ The core loop is small: the agent writes a spec from your issue and the current 
 
 - **Prompt it yourself, step by step.** Fine for small tasks, but you're holding the structure in your head.
 - **Let the harness drive it.** A plugin like superpowers runs the whole spec, implement, and review loop for you.
-- **Write a skill that constrains it.** When you want the loop to run the same way every time, wrap it in a skill of your own. Our MMGIS [orchestrating-issues](https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/orchestrating-issues) skill is one example you can build from: it takes an issue all the way to a draft PR, hands the spec, implementation, and review off to the harness, and stops for you at the few gates that actually need a human.
+- **Write a skill that constrains it.** When you want the loop to run the same way every time, wrap it in a skill of your own. Our MMGIS [orchestrating-issues](https://github.com/NASA-IMPACT/MMGIS/tree/development/.claude/skills/orchestrating-issues) skill is one example you can build from: it takes an issue all the way to a draft PR, hands the spec, implementation, and review off to the harness, and stops for you at the few gates that actually need a human.
 
 One fair warning on that last option: orchestration skills tend to be mildly specific to one repo, because they encode how *you* deploy, *your* conventions, and *your* gotchas. Use someone else's as a starting point, not a drop-in.
 
 ## Parallel agents
 
-If your repo is gnarly, it's often worth spending a little time up front refactoring it so you can run several instances side by side on your own machine. That is what unlocks working several issues in parallel without them colliding. Our MMGIS [mmgis-deployment](https://github.com/NASA-IMPACT/MMGIS/tree/feature/orchestration-skill/.claude/skills/mmgis-deployment) skill is one example of how this was done: each instance gets its own port, database, and config, so many of them coexist cleanly on one machine between different git worktrees.
+If your repo is gnarly, it's often worth spending a little time up front refactoring it so you can run several instances side by side on your own machine. That is what unlocks working several issues in parallel without them colliding. Our MMGIS [mmgis-deployment](https://github.com/NASA-IMPACT/MMGIS/tree/development/.claude/skills/mmgis-deployment) skill is one example of how this was done: each instance gets its own port, database, and config, so many of them coexist cleanly on one machine between different git worktrees.
 
 This is especially useful for keeping issues (and therefore PRs) small. If your orchestration agent can work on several interconnected issues in parallel, it becomes much easier to develop, bugfix, review, and smoketest interdependent features without needing to shove them into a single giant PR.
 
