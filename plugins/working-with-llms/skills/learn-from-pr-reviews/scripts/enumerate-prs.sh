@@ -13,10 +13,10 @@ set -euo pipefail
 REPO="${1:?usage: enumerate-prs.sh <owner/repo> [limit]}"
 LIMIT="${2:-100000}"   # effectively "all"; we warn below if a repo actually hits it
 
-# Resolve output dir relative to the repo root that contains this script's parent.
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+# Outputs go under the directory the user runs the mining from, not the
+# installed plugin directory this script lives in.
 SLUG="${REPO//\//-}"
-OUTDIR="$ROOT/review-mining/$SLUG"
+OUTDIR="$PWD/review-mining/$SLUG"
 mkdir -p "$OUTDIR"
 
 echo "Phase 1: enumerating PRs for $REPO (limit $LIMIT) ..." >&2

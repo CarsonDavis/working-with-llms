@@ -39,9 +39,8 @@ NAME="${REPO##*/}"
 WINDOW="${WINDOW:-50}"          # +/- lines around the commented line
 MAX_DELTA_LINES="${MAX_DELTA_LINES:-400}"
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SLUG="${REPO//\//-}"
-OUTDIR="$ROOT/review-mining/$SLUG"
+OUTDIR="$PWD/review-mining/$SLUG"
 THREADDIR="$OUTDIR/02-threads"
 mkdir -p "$THREADDIR"
 

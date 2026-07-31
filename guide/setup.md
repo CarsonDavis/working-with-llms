@@ -73,7 +73,7 @@ The first, `.claude/settings.json`, is the marketplace pointer. It is what promp
 }
 ```
 
-You can also let the CLI write that entry for you: `claude plugin marketplace add CarsonDavis/working-with-llms --scope project`.
+You can also let the CLI write the marketplace half for you: `claude plugin marketplace add CarsonDavis/working-with-llms --sparse .claude-plugin plugins --scope project` — then add the `enabledPlugins` block yourself, since the CLI does not write it.
 
 The second file, `.claude/wwl.json`, is the enforcement marker. Without it the reminder never fires:
 

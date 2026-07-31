@@ -15,9 +15,8 @@
 set -euo pipefail
 
 REPO="${1:?usage: split-threads.sh <owner/repo>}"
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SLUG="${REPO//\//-}"
-OUTDIR="$ROOT/review-mining/$SLUG"
+OUTDIR="$PWD/review-mining/$SLUG"
 THREADDIR="$OUTDIR/02-threads"
 INDIR="$OUTDIR/03-input"
 

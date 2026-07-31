@@ -22,8 +22,11 @@ filtered out and "addressed / ignored / rejected" is decided from evidence.
 - `<owner/repo>` — the GitHub repo (e.g. `NASA-IMPACT/MMGIS`).
 - `<local-clone-path>` — a local clone of that repo (needed for code enrichment).
 - `gh` must be authenticated (`gh auth status`).
+- `<skill-dir>` below means this skill's own directory — the one this SKILL.md
+  lives in.
 
-Outputs land in `review-mining/<owner-repo>/` at the repo root (gitignored).
+Outputs land in `review-mining/<owner-repo>/` under your current working
+directory. Gitignore it — never commit mined repo data.
 
 ## The pipeline
 
@@ -38,7 +41,7 @@ digraph { "1 Enumerate"->"2 Dump+Enrich"->"3 Verdict (fan-out)"->"4 Categorize"-
 ### Phase 1 — Enumerate (no LLM)
 
 ```bash
-skills/learn-from-pr-reviews/scripts/enumerate-prs.sh <owner/repo>
+<skill-dir>/scripts/enumerate-prs.sh <owner/repo>
 ```
 Writes `01-prs.json` (all states — merged, closed, open). The fork boundary is
 automatic: `gh pr list` against a fork returns only PRs opened in the fork.
@@ -49,7 +52,7 @@ Loop over every PR number (use a `read` loop — `for n in $(...)` does NOT spli
 on newlines under zsh):
 ```bash
 jq -r '.[].number' review-mining/<owner-repo>/01-prs.json | while IFS= read -r n; do
-  skills/learn-from-pr-reviews/scripts/fetch-pr-threads.sh <owner/repo> <local-clone-path> "$n"
+  <skill-dir>/scripts/fetch-pr-threads.sh <owner/repo> <local-clone-path> "$n"
 done
 ```
 Per PR this writes `02-threads/PR-<n>.json` — one self-contained record per
@@ -65,12 +68,12 @@ fetches PR refs into the clone once, so even closed-PR commits resolve.
 First, split the threads into one file per record (handles thousands; prints the
 total COUNT):
 ```bash
-COUNT=$(skills/learn-from-pr-reviews/scripts/split-threads.sh <owner/repo>)
+COUNT=$(<skill-dir>/scripts/split-threads.sh <owner/repo>)
 ```
 Then invoke the **Workflow tool** (this skill's instruction is the opt-in) to run
 one **Sonnet** subagent per record (the default; pass `args.model: "haiku"` to
 trade accuracy for cost), using the template
-`skills/learn-from-pr-reviews/scripts/phase3-verdict.workflow.js`. Each agent
+`<skill-dir>/scripts/phase3-verdict.workflow.js`. Each agent
 reads its `03-input/rec-NNNNN.json`, decides `substantive`, `category`, and the
 evidence-based `verdict` (using `post_comment_delta`, `renamed_to`, and the
 `resolved` flag as the "acted on?" signals), and distills ONE generalizable
